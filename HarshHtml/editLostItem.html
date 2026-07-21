@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Findify - Edit Lost Item</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#d9b184;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    width:420px;
+    background:#fffdf8;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:8px 8px 0 rgba(0,0,0,.2);
+}
+
+h1,h3{
+    text-align:center;
+}
+
+h1{
+    color:#8B0000;
+}
+
+h3{
+    color:#555;
+    margin:5px 0 20px;
+}
+
+label{
+    font-weight:bold;
+}
+
+input,select,textarea{
+    width:100%;
+    padding:10px;
+    margin:5px 0 12px;
+    border:2px solid #444;
+    border-radius:8px;
+}
+
+textarea{
+    height:70px;
+    resize:none;
+}
+
+.button{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+}
+
+.btn{
+    flex:1;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    color:white;
+    cursor:pointer;
+}
+
+.update{
+    background:#007bff;
+}
+
+.clear{
+    background:#555;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1><b>FINDIFY</b></h1>
+<h3><b>Edit Lost Item</b></h3>
+
+<form action="EditLostItemServlet" method="post">
+
+<label>Item ID:</label>
+<input type="number" name="itemId" placeholder="Enter Item ID" required>
+
+<label>Item Name:</label>
+<input type="text" name="itemName" placeholder="Enter Item Name" required>
+
+<label>Category:</label>
+<select name="category" required>
+    <option value="">--Select Category--</option>
+    <option>Mobile</option>
+    <option>Wallet</option>
+    <option>Laptop</option>
+    <option>Bag</option>
+    <option>Watch</option>
+    <option>Keys</option>
+    <option>ID Card</option>
+    <option>Others</option>
+</select>
+
+<label>Description:</label>
+<textarea name="description" placeholder="Describe the item"></textarea>
+
+<label>Lost Location:</label>
+<input type="text" name="location" placeholder="Enter Location" required>
+
+<label>Date Lost:</label>
+<input type="date" name="dateLost" required>
+
+<label>Contact Number:</label>
+<input type="tel" name="contactNumber" placeholder="Enter Contact Number" maxlength="10" required>
+
+<div class="button">
+    <input type="submit" value="Update Item" class="btn update">
+    <input type="reset" value="Clear" class="btn clear">
+</div>
+
+</form>
+
+</div>
+
+</body>
+</html>

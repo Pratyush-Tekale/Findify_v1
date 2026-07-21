@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Findify - View Items</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#d9b184;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    width:90%;
+    max-width:1000px;
+    background:#fffdf8;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:8px 8px 0 rgba(0,0,0,.2);
+}
+
+h1,h3{
+    text-align:center;
+}
+
+h1{
+    color:#8B0000;
+}
+
+h3{
+    color:#555;
+    margin:5px 0 20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#b3362d;
+    color:white;
+    padding:10px;
+}
+
+td{
+    padding:10px;
+    text-align:center;
+    border-bottom:1px solid gray;
+}
+
+button{
+    padding:6px 12px;
+    border:none;
+    border-radius:5px;
+    color:white;
+    cursor:pointer;
+}
+
+.edit{
+    background:#007bff;
+}
+
+.delete{
+    background:#555;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1><b>FINDIFY</b></h1>
+<h3><b><u>View Items</u></b></h3>
+
+<table>
+
+<tr>
+<th>ID</th>
+<th>Item Name</th>
+<th>Category</th>
+<th>Location</th>
+<th>Date</th>
+<th>Action</th>
+</tr>
+
+<tr>
+<td>101</td>
+<td>Wallet</td>
+<td>Wallet</td>
+<td>Library</td>
+<td>15-07-2026</td>
+<td>
+<button class="edit">Edit</button>
+<button class="delete">Delete</button>
+</td>
+</tr>
+
+<tr>
+<td>102</td>
+<td>Mobile</td>
+<td>Mobile</td>
+<td>Canteen</td>
+<td>16-07-2026</td>
+<td>
+<button class="edit">Edit</button>
+<button class="delete">Delete</button>
+</td>
+</tr>
+
+<tr>
+<td>103</td>
+<td>Laptop Bag</td>
+<td>Bag</td>
+<td>Parking</td>
+<td>17-07-2026</td>
+<td>
+<button class="edit">Edit</button>
+<button class="delete">Delete</button>
+</td>
+</tr>
+
+</table>
+
+</div>
+
+</body>
+</html>
