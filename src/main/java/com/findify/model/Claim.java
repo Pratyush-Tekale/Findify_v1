@@ -1,6 +1,8 @@
 package com.findify.model;
 
 import java.sql.Timestamp;
+
+
 public class Claim {
 
     private int claimId;
@@ -12,12 +14,11 @@ public class Claim {
     
     
     public Claim() {
-
     }
     
     public Claim(int claimId, int foundId, int claimantId, String proof,
             String status, Timestamp claimDate) {
-
+    	
    this.claimId = claimId;
    this.foundId = foundId;
    this.claimantId = claimantId;

@@ -1,0 +1,93 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+background:#F3EEE1;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+padding:30px;
+}
+
+.container{
+width:100%;
+max-width:700px;
+}
+
+.card{
+background:#FBF7EE;
+border:2px solid #221E1A;
+padding:40px;
+border-radius:8px;
+box-shadow:8px 8px 0 rgba(0,0,0,.15);
+}
+
+h1{
+font-family:'Special Elite',cursive;
+text-align:center;
+font-size:38px;
+margin-bottom:20px;
+color:#B33A2D;
+}
+
+.message{
+text-align:center;
+font-size:18px;
+margin-bottom:30px;
+color:#444;
+}
+
+.ticket{
+background:#fff;
+border:2px dashed #BC9468;
+padding:25px;
+border-radius:6px;
+margin-bottom:30px;
+}
+
+.ticket h2{
+font-family:'Special Elite',cursive;
+margin-bottom:20px;
+color:#22303F;
+}
+
+.ticket p{
+margin:12px 0;
+font-size:16px;
+}
+
+.info{
+margin-bottom:30px;
+}
+
+.info h3{
+font-family:'Special Elite',cursive;
+margin-bottom:15px;
+color:#22303F;
+}
+
+.info ul{
+padding-left:20px;
+line-height:2;
+}
+
+.btn{
+display:block;
+text-align:center;
+background:#B33A2D;
+color:white;
+text-decoration:none;
+padding:15px;
+font-weight:bold;
+border-radius:5px;
+transition:.3s;
+}
+
+.btn:hover{
+background:#22303F;
+}

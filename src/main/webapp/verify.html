@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Findify | Verify Claim</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/verify.css">
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+FINDIFY
+</div>
+
+<nav>
+
+<a href="index.html">Home</a>
+<a href="contact.html">Contact us</a>
+
+</nav>
+
+</header>
+
+<section class="verify-section">
+
+<div class="verify-card">
+
+<div class="paper-tape"></div>
+
+<h4>VERIFY CLAIM</h4>
+
+<h1>Claim Found Item</h1>
+
+<p>
+Complete the details below to verify that the found item belongs to you.
+</p>
+
+<form action="claim.html" method="get">
+
+<div class="row">
+
+<div class="input-group">
+
+<label>Full Name<span style="color:#c0392b;">*</span></label>
+
+<input
+type="text"
+id="fullName"
+placeholder="Enter your full name"
+required>
+
+</div>
+
+<div class="input-group">
+
+<label>Email<span style="color:#c0392b;">*</span></label>
+
+<input
+type="email"
+id="email"
+placeholder="example@gmail.com"
+required>
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="input-group">
+
+<label>Phone Number<span style="color:#c0392b;">*</span></label>
+
+<input
+type="tel"
+id="phone"
+placeholder="9876543210"
+required>
+
+</div>
+
+<div class="input-group">
+
+<label>Found Item ID<span style="color:#c0392b;">*</span></label>
+
+<input
+type="text"
+id="itemId"
+placeholder="Example: FND-2295"
+required>
+
+</div>
+
+</div>
+
+<div class="input-group">
+
+<label>Proof of Ownership<span style="color:#c0392b;">*</span></label>
+
+<textarea
+id="proof"
+rows="5"
+placeholder="Describe something that proves this item belongs to you..."
+required></textarea>
+
+</div>
+
+<div class="input-group">
+
+<label>Upload Proof (Optional)</label>
+
+<input
+type="file"
+id="proofFile"
+accept=".jpg,.jpeg,.png,.pdf">
+
+</div>
+
+<button type="submit" class="verify-btn">
+
+Submit Claim
+
+</button>
+
+</form>
+
+<div class="back-link">
+
+<a href="index.html">
+
+← Back to Home
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<script src="js/verify.js"></script>
+
+</body>
+</html>

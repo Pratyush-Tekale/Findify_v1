@@ -90,7 +90,7 @@ CREATE TABLE claims(
 		ON DELETE CASCADE,
 		CONSTRAINT fk_claim_user
 		FOREIGN KEY(claimant_id)
-		REFERENCES users(user_id)
+		REF 	ERENCES users(user_id)
 		ON DELETE CASCADE
 );
 

@@ -3,637 +3,290 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Findify — Campus Lost &amp; Found</title>
+<title>Findify — Lost it? Log it. Found it? Tag it.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --ink:#132743;
-    --ink-soft:#24405e;
-    --paper:#FBF9F4;
-    --paper-dim:#F1EDE2;
-    --amber:#F2A93B;
-    --amber-deep:#C97F16;
-    --teal:#2F6F6B;
-    --rust:#C1440E;
-    --claimed:#8A8570;
-    --line: rgba(19,39,67,0.14);
-    --radius: 6px;
-  }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    background:var(--paper);
-    color:var(--ink);
-    font-family:'IBM Plex Sans', sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
-  h1,h2,h3{
-    font-family:'Fraunces', serif;
-    margin:0;
-    letter-spacing:-0.01em;
-  }
-  .mono{ font-family:'IBM Plex Mono', monospace; letter-spacing:0.03em; }
-  a{ color:inherit; }
-  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
-  :focus-visible{ outline:2px solid var(--amber-deep); outline-offset:3px; }
-
-  /* ---------- NAV ---------- */
-  header.nav{
-    background:var(--ink);
-    color:var(--paper);
-    position:sticky; top:0; z-index:50;
-    border-bottom:1px solid rgba(251,249,244,0.08);
-  }
-  .nav-inner{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:18px 32px;
-    max-width:1180px; margin:0 auto;
-  }
-  .logo{
-    display:flex; align-items:center; gap:10px;
-    font-family:'Fraunces', serif; font-weight:600; font-size:1.35rem;
-    text-decoration:none; color:var(--paper);
-  }
-  .logo-tag{
-    width:22px; height:22px; border-radius:5px;
-    background:var(--amber);
-    position:relative;
-    flex-shrink:0;
-  }
-  .logo-tag::after{
-    content:'';
-    position:absolute; left:5px; top:5px;
-    width:6px; height:6px; border-radius:50%;
-    background:var(--ink);
-  }
-  nav.links{ display:flex; align-items:center; gap:34px; }
-  nav.links a{
-    text-decoration:none; color:rgba(251,249,244,0.78);
-    font-size:0.94rem; font-weight:500;
-    transition:color .15s ease;
-  }
-  nav.links a:hover{ color:var(--paper); }
-  .btn{
-    display:inline-flex; align-items:center; gap:8px;
-    padding:10px 20px;
-    border-radius:4px;
-    font-weight:600; font-size:0.92rem;
-    text-decoration:none;
-    cursor:pointer; border:none;
-    font-family:'IBM Plex Sans', sans-serif;
-    transition:transform .15s ease, box-shadow .15s ease;
-  }
-  .btn-amber{ background:var(--amber); color:var(--ink); }
-  .btn-amber:hover{ transform:translateY(-1px); box-shadow:0 6px 16px rgba(242,169,59,0.35); }
-  .btn-outline{
-    background:transparent; color:var(--paper);
-    border:1px solid rgba(251,249,244,0.35);
-  }
-  .btn-outline:hover{ border-color:var(--paper); }
-  .nav-cta{ display:flex; gap:12px; align-items:center; }
-  .burger{ display:none; }
-
-  /* ---------- HERO ---------- */
-  .hero{
-    background:var(--ink);
-    color:var(--paper);
-    padding:76px 0 0;
-    position:relative;
-    overflow:hidden;
-  }
-  .hero::before{
-    content:'';
-    position:absolute; inset:0;
-    background-image:
-      radial-gradient(circle at 85% 20%, rgba(242,169,59,0.10), transparent 45%),
-      radial-gradient(circle at 10% 80%, rgba(47,111,107,0.18), transparent 40%);
-    pointer-events:none;
-  }
-  .hero-grid{
-    display:grid;
-    grid-template-columns:1.05fr 0.95fr;
-    gap:48px;
-    align-items:center;
-    position:relative;
-  }
-  .eyebrow{
-    display:inline-flex; align-items:center; gap:8px;
-    color:var(--amber);
-    font-size:0.82rem; font-weight:500;
-    text-transform:uppercase; letter-spacing:0.14em;
-    margin-bottom:20px;
-  }
-  .eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--amber); }
-  .hero h1{
-    font-size:clamp(2.4rem, 4.6vw, 3.9rem);
-    line-height:1.06;
-    font-weight:600;
-    max-width:620px;
-  }
-  .hero h1 em{
-    font-style:italic; font-weight:500; color:var(--amber);
-  }
-  .hero p.lede{
-    margin:24px 0 34px;
-    font-size:1.08rem;
-    line-height:1.6;
-    color:rgba(251,249,244,0.72);
-    max-width:480px;
-  }
-  .search-ticket{
-    display:flex; align-items:stretch;
-    background:var(--paper);
-    border-radius:6px;
-    padding:6px;
-    max-width:520px;
-    box-shadow:0 20px 40px rgba(0,0,0,0.28);
-  }
-  .search-ticket input{
-    flex:1;
-    border:none; outline:none;
-    background:transparent;
-    color:var(--ink);
-    font-family:'IBM Plex Sans', sans-serif;
-    font-size:0.98rem;
-    padding:12px 16px;
-  }
-  .search-ticket input::placeholder{ color:#8b8577; }
-  .search-ticket button{
-    background:var(--ink);
-    color:var(--paper);
-    border:none; border-radius:4px;
-    padding:0 22px;
-    font-weight:600; font-size:0.92rem;
-    cursor:pointer;
-    font-family:'IBM Plex Sans', sans-serif;
-    transition:background .15s ease;
-  }
-  .search-ticket button:hover{ background:var(--ink-soft); }
-  .hero-tags{ font-size:0.82rem; color:rgba(251,249,244,0.5); margin-top:16px; }
-  .hero-tags span{ color:var(--paper); font-weight:500; }
-
-  /* ticket card used in hero + belt + grid */
-  .tag-card{
-    background:var(--paper);
-    color:var(--ink);
-    border-radius:6px;
-    display:flex;
-    min-width:250px;
-    box-shadow:0 14px 30px rgba(0,0,0,0.18);
-    position:relative;
-    flex-shrink:0;
-  }
-  .tag-stub{
-    width:34px;
-    display:flex; align-items:center; justify-content:center;
-    border-right:2px dashed rgba(19,39,67,0.18);
-    position:relative;
-  }
-  .tag-stub span{
-    writing-mode:vertical-rl;
-    transform:rotate(180deg);
-    font-size:0.72rem;
-    color:#8b8577;
-    letter-spacing:0.06em;
-  }
-  .tag-stub::before, .tag-stub::after{
-    content:'';
-    position:absolute; left:-7px;
-    width:14px; height:14px; border-radius:50%;
-    background:var(--ink);
-  }
-  .tag-stub::before{ top:-7px; }
-  .tag-stub::after{ bottom:-7px; }
-  .tag-body{ padding:16px 18px; flex:1; min-width:0; }
-  .tag-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
-  .tag-body h4{ font-family:'Fraunces', serif; font-weight:600; font-size:1.04rem; margin:0 0 3px; }
-  .tag-meta{ font-size:0.8rem; color:#7d7869; }
-  .stamp{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.66rem; font-weight:500;
-    letter-spacing:0.08em;
-    padding:3px 9px;
-    border-radius:3px;
-    border:1.4px solid currentColor;
-    transform:rotate(-6deg);
-    white-space:nowrap;
-    flex-shrink:0;
-  }
-  .stamp.lost{ color:var(--rust); }
-  .stamp.found{ color:var(--teal); }
-  .stamp.claimed{ color:var(--claimed); }
-  .tag-id{ margin-top:10px; font-size:0.72rem; color:#a29c8c; }
-
-  .hero-stack{ position:relative; height:420px; }
-  .hero-stack .tag-card{ position:absolute; width:100%; max-width:330px; }
-  .hero-stack .tag-card:nth-child(1){ top:0; right:0; z-index:3; }
-  .hero-stack .tag-card:nth-child(2){ top:120px; right:36px; z-index:2; opacity:0.94; }
-  .hero-stack .tag-card:nth-child(3){ top:240px; right:8px; z-index:1; opacity:0.88; }
-
-  /* ---------- BELT / CAROUSEL (signature element) ---------- */
-  .belt-section{
-    background:var(--ink-soft);
-    padding:26px 0;
-    overflow:hidden;
-    position:relative;
-    border-top:1px solid rgba(251,249,244,0.1);
-    border-bottom:1px solid rgba(251,249,244,0.1);
-  }
-  .belt-label{
-    position:absolute; left:32px; top:50%; transform:translateY(-50%);
-    z-index:5;
-    background:var(--ink-soft);
-    padding-right:18px;
-    font-size:0.72rem; text-transform:uppercase; letter-spacing:0.14em;
-    color:rgba(251,249,244,0.55);
-    display:none;
-  }
-  .belt-track{
-    display:flex;
-    gap:22px;
-    width:max-content;
-    animation:beltMove 34s linear infinite;
-  }
-  .belt-section:hover .belt-track{ animation-play-state:paused; }
-  @keyframes beltMove{
-    from{ transform:translateX(0); }
-    to{ transform:translateX(-50%); }
-  }
-  .belt-track .tag-card{ min-width:240px; }
-
-  /* ---------- STATS ---------- */
-  .stats{ background:var(--paper); padding:64px 0; }
-  .stats-row{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    border-top:1px solid var(--line);
-    border-bottom:1px solid var(--line);
-  }
-  .stat{
-    padding:30px 24px;
-    text-align:center;
-    position:relative;
-  }
-  .stat:not(:last-child)::after{
-    content:'';
-    position:absolute; right:0; top:14px; bottom:14px;
-    border-right:2px dashed var(--line);
-  }
-  .stat .num{
-    font-family:'Fraunces', serif; font-weight:600;
-    font-size:clamp(1.8rem, 3vw, 2.5rem);
-    color:var(--ink);
-  }
-  .stat .num .accent{ color:var(--amber-deep); }
-  .stat .lbl{ margin-top:8px; font-size:0.88rem; color:#726d5f; }
-
-  /* ---------- HOW IT WORKS ---------- */
-  .how{ padding:100px 0; background:var(--paper-dim); }
-  .section-head{ max-width:560px; margin-bottom:56px; }
-  .section-eyebrow{
-    font-size:0.8rem; text-transform:uppercase; letter-spacing:0.14em;
-    color:var(--amber-deep); font-weight:600; margin-bottom:12px; display:block;
-  }
-  .section-head h2{ font-size:clamp(1.8rem, 3vw, 2.4rem); font-weight:600; }
-  .steps{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:28px;
-  }
-  .step{
-    background:var(--paper);
-    border-radius:8px;
-    padding:32px 26px;
-    border:1px solid var(--line);
-    position:relative;
-  }
-  .step .step-no{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.78rem;
-    color:var(--amber-deep);
-    background:rgba(242,169,59,0.14);
-    display:inline-block;
-    padding:4px 10px;
-    border-radius:3px;
-    margin-bottom:18px;
-  }
-  .step h3{ font-size:1.2rem; font-weight:600; margin-bottom:10px; }
-  .step p{ font-size:0.94rem; color:#726d5f; line-height:1.6; margin:0; }
-
-  /* ---------- BROWSE / GRID ---------- */
-  .browse{ padding:100px 0; background:var(--paper); }
-  .browse-head{
-    display:flex; align-items:flex-end; justify-content:space-between;
-    gap:24px; margin-bottom:40px; flex-wrap:wrap;
-  }
-  .chips{ display:flex; gap:10px; flex-wrap:wrap; }
-  .chip{
-    padding:8px 16px;
-    border-radius:20px;
-    border:1px solid var(--line);
-    background:transparent;
-    font-size:0.85rem; font-weight:500;
-    cursor:pointer;
-    font-family:'IBM Plex Sans', sans-serif;
-    color:var(--ink);
-    transition:all .15s ease;
-  }
-  .chip.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
-  .chip:hover:not(.active){ border-color:var(--ink); }
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:22px;
-  }
-  .grid .tag-card{ width:100%; }
-  .grid .tag-card[data-status="claimed"]{ opacity:0.72; }
-
-  /* ---------- CTA ---------- */
-  .cta-band{
-    background:var(--ink);
-    color:var(--paper);
-    padding:80px 0;
-    text-align:center;
-  }
-  .cta-band h2{
-    font-size:clamp(1.9rem, 3.4vw, 2.7rem);
-    font-weight:600;
-    max-width:640px;
-    margin:0 auto 16px;
-  }
-  .cta-band p{
-    color:rgba(251,249,244,0.65);
-    max-width:460px;
-    margin:0 auto 30px;
-    font-size:1rem;
-  }
-  .cta-actions{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
-
-  /* ---------- FOOTER ---------- */
-  footer{
-    background:var(--ink);
-    color:rgba(251,249,244,0.55);
-    border-top:1px solid rgba(251,249,244,0.1);
-    padding:36px 0;
-    font-size:0.85rem;
-  }
-  .footer-row{
-    display:flex; align-items:center; justify-content:space-between;
-    flex-wrap:wrap; gap:12px;
-  }
-  footer a{ color:rgba(251,249,244,0.75); text-decoration:none; }
-  footer a:hover{ color:var(--paper); }
-  .footer-links{ display:flex; gap:22px; }
-
-  @media (prefers-reduced-motion: reduce){
-    .belt-track{ animation:none; }
-    html{ scroll-behavior:auto; }
-  }
-
-  @media (max-width:920px){
-    nav.links{ display:none; }
-    .hero-grid{ grid-template-columns:1fr; }
-    .hero-stack{ height:340px; margin-top:20px; }
-    .stats-row, .steps, .grid{ grid-template-columns:1fr 1fr; }
-    .stat:nth-child(2)::after{ display:none; }
-  }
-  @media (max-width:600px){
-    .wrap{ padding:0 20px; }
-    .stats-row, .steps, .grid{ grid-template-columns:1fr; }
-    .stat::after{ display:none !important; }
-    .hero{ padding-top:56px; }
-    .search-ticket{ flex-direction:column; }
-    .search-ticket button{ padding:12px; }
-  }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Big+Shoulders+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<header class="nav">
-  <div class="nav-inner">
-    <a href="#" class="logo"><span class="logo-tag"></span>Findify</a>
-    <nav class="links">
-      <a href="#how">How it works</a>
-      <a href="#browse">Browse items</a>
-      <a href="#report">Report an item</a>
+<header>
+  <div class="wrap">
+    <nav>
+      <a href="#top" class="logo">
+        <svg class="tag-ico" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 12L12 2H20V10L10 20C9 21 7 21 6 20L2 16C1 15 1 13 2 12Z" stroke="#221E1A" stroke-width="2" stroke-linejoin="round"/>
+          <circle cx="15" cy="7" r="1.6" fill="#221E1A"/>
+        </svg>
+        FINDIFY
+      </a>
+      <ul class="links">
+        <li><a href="#report">Report Lost</a></li>
+        <li><a href="#found">Browse Found</a></li>
+        <li><a href="#how">How it Works</a></li>
+      </ul>
+      <a href="login.html" class="nav-cta" id="loginBtn">
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 21a8 8 0 0 0-16 0"/>
+      <circle cx="12" cy="7" r="4"/>
+    </svg>
+    Log in
+</a>
     </nav>
-    <div class="nav-cta">
-      <a href="#report" class="btn btn-amber">Report an item</a>
-    </div>
   </div>
 </header>
-
-<section class="hero">
-  <div class="wrap hero-grid">
+<section class="hero" id="top">
+  <div class="wrap hero-inner">
     <div>
-      <span class="eyebrow"><span class="dot"></span>Campus lost &amp; found, digitised</span>
-      <h1>Lost it on campus? <em>Someone found it.</em></h1>
-      <p class="lede">Findify logs every misplaced item across your college — bags, ID cards, chargers, keys — and matches finders with owners in hours, not weeks.</p>
-      <form class="search-ticket" role="search">
-        <input type="text" placeholder="Search by item, category, or location…" aria-label="Search lost items">
-        <button type="submit">Search</button>
-      </form>
-      <p class="hero-tags"><span>1,240+</span> items logged this semester across 6 campus zones</p>
+      <div class="eyebrow-strip">Campus Lost &amp; Found · Live Board</div>
+      <h1 class="hero-title">
+        <span class="stampline">If it's lost,</span><br>
+        it's <span class="redword">logged.</span>
+      </h1>
+      <p class="lead">Findify keeps a running log of everything found around campus — books, IDs, earbuds, bottles, etc — so you can search it, claim it, and get back to class. Report what you lost in under a minute.</p>
+      <div class="hero-ctas">
+        <a href="report.html" class="btn btn-primary" id="reportBtn">Report a Lost Item</a>
+        <a href="found.html" class="btn btn-secondary">Browse Found Items</a>
+      </div>
     </div>
-    <div class="hero-stack" aria-hidden="true">
-      <div class="tag-card">
-        <div class="tag-stub"><span class="mono">FND-0472</span></div>
-        <div class="tag-body">
-          <div class="tag-top">
-            <div><h4>Navy Blue Backpack</h4><div class="tag-meta">Central Library, 2nd Floor</div></div>
-            <span class="stamp lost">LOST</span>
-          </div>
-          <div class="tag-id mono">Reported 3 hrs ago</div>
-        </div>
-      </div>
-      <div class="tag-card">
-        <div class="tag-stub"><span class="mono">FND-0511</span></div>
-        <div class="tag-body">
-          <div class="tag-top">
-            <div><h4>Silver AirPods Case</h4><div class="tag-meta">Cafeteria, Table 12</div></div>
-            <span class="stamp found">FOUND</span>
-          </div>
-          <div class="tag-id mono">Reported yesterday</div>
-        </div>
-      </div>
-      <div class="tag-card">
-        <div class="tag-stub"><span class="mono">FND-0398</span></div>
-        <div class="tag-body">
-          <div class="tag-top">
-            <div><h4>Student ID Card — R. Mehta</h4><div class="tag-meta">Main Auditorium</div></div>
-            <span class="stamp claimed">CLAIMED</span>
-          </div>
-          <div class="tag-id mono">Returned Tue, 4:12 PM</div>
-        </div>
+    <div class="tag-hang-wrap">
+      <div class="pin"></div>
+      <div class="string"></div>
+      <div class="claim-tag">
+        <div class="tag-id">Campus Promise</div>
+        <div class="tag-foot">See it?</div>&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="stamp-flip">&nbsp;Report it&nbsp;</div>
+        <div class="tag-foot">Small actions make campus better for everyone.</div>
       </div>
     </div>
   </div>
 </section>
-
-<section class="belt-section" aria-label="Recently logged items">
-  <div class="belt-track" id="beltTrack">
-    <!-- set 1 -->
-    <div class="tag-card"><div class="tag-stub"><span class="mono">0512</span></div><div class="tag-body"><div class="tag-top"><div><h4>TI-84 Calculator</h4><div class="tag-meta">Room 214</div></div><span class="stamp lost">LOST</span></div></div></div>
-    <div class="tag-card"><div class="tag-stub"><span class="mono">0509</span></div><div class="tag-body"><div class="tag-top"><div><h4>Black Umbrella</h4><div class="tag-meta">Main Gate</div></div><span class="stamp found">FOUND</span></div></div></div>
-    <div class="tag-card"><div class="tag-stub"><span class="mono">0505</span></div><div class="tag-body"><div class="tag-top"><div><h4>Hostel Room Key</h4><div class="tag-meta">Block C Lobby</div></div><span class="stamp found">FOUND</span></div></div></div>
-    <div class="tag-card"><div class="tag-stub"><span class="mono">0501</span></div><div class="tag-body"><div class="tag-top"><div><h4>Wired Earphones</h4><div class="tag-meta">Sports Complex</div></div><span class="stamp claimed">CLAIMED</span></div></div></div>
-    <div class="tag-card"><div class="tag-stub"><span class="mono">0498</span></div><div class="tag-body"><div class="tag-top"><div><h4>Water Bottle, Steel</h4><div class="tag-meta">Lecture Hall 3</div></div><span class="stamp lost">LOST</span></div></div></div>
-    <div class="tag-card"><div class="tag-stub"><span class="mono">0490</span></div><div class="tag-body"><div class="tag-top"><div><h4>USB Drive, 32GB</h4><div class="tag-meta">Computer Lab</div></div><span class="stamp found">FOUND</span></div></div></div>
-    <!-- duplicate set for seamless loop -->
-    <div class="tag-card"><div class="tag-stub"><span class="mono">0512</span></div><div class="tag-body"><div class="tag-top"><div><h4>TI-84 Calculator</h4><div class="tag-meta">Room 214</div></div><span class="stamp lost">LOST</span></div></div></div>
-    <div class="tag-card"><div class="tag-stub"><span class="mono">0509</span></div><div class="tag-body"><div class="tag-top"><div><h4>Black Umbrella</h4><div class="tag-meta">Main Gate</div></div><span class="stamp found">FOUND</span></div></div></div>
-    <div class="tag-card"><div class="tag-stub"><span class="mono">0505</span></div><div class="tag-body"><div class="tag-top"><div><h4>Hostel Room Key</h4><div class="tag-meta">Block C Lobby</div></div><span class="stamp found">FOUND</span></div></div></div>
-    <div class="tag-card"><div class="tag-stub"><span class="mono">0501</span></div><div class="tag-body"><div class="tag-top"><div><h4>Wired Earphones</h4><div class="tag-meta">Sports Complex</div></div><span class="stamp claimed">CLAIMED</span></div></div></div>
-    <div class="tag-card"><div class="tag-stub"><span class="mono">0498</span></div><div class="tag-body"><div class="tag-top"><div><h4>Water Bottle, Steel</h4><div class="tag-meta">Lecture Hall 3</div></div><span class="stamp lost">LOST</span></div></div></div>
-    <div class="tag-card"><div class="tag-stub"><span class="mono">0490</span></div><div class="tag-body"><div class="tag-top"><div><h4>USB Drive, 32GB</h4><div class="tag-meta">Computer Lab</div></div><span class="stamp found">FOUND</span></div></div></div>
-  </div>
-</section>
-
-<section class="stats">
-  <div class="wrap">
-    <div class="stats-row">
-      <div class="stat">
-        <div class="num"><span class="accent">1,240+</span></div>
-        <div class="lbl">Items logged this semester</div>
-      </div>
-      <div class="stat">
-        <div class="num">68<span class="accent">%</span></div>
-        <div class="lbl">Reunited within 48 hours</div>
-      </div>
-      <div class="stat">
-        <div class="num">3 <span class="accent">steps</span></div>
-        <div class="lbl">From report to claim</div>
-      </div>
+<div class="stats-strip">
+  <div class="marquee-track">
+    <div class="cat">
+      <div class="cat-circle">🧴</div>
+      <div class="cat-label">Bottles</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">🆔</div>
+      <div class="cat-label">ID Cards</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">🎧</div>
+      <div class="cat-label">Earbuds</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">📕</div>
+      <div class="cat-label">Books</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">🔑</div>
+      <div class="cat-label">Keys</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">💾</div>
+      <div class="cat-label">Pendrive</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">👛</div>
+      <div class="cat-label">Wallets</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">📱</div>
+      <div class="cat-label">Phones</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">🔌</div>
+      <div class="cat-label">Chargers</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">☂️</div>
+      <div class="cat-label">Umbrellas</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">⌚</div>
+      <div class="cat-label">Watches</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">🎒</div>
+      <div class="cat-label">Bags</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">🧴</div>
+      <div class="cat-label">Bottles</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">🆔</div>
+      <div class="cat-label">ID Cards</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">🎧</div>
+      <div class="cat-label">Earbuds</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">📕</div>
+      <div class="cat-label">Books</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">🔑</div>
+      <div class="cat-label">Keys</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">💾</div>
+      <div class="cat-label">Pendrive</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">👛</div>
+      <div class="cat-label">Wallets</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">📱</div>
+      <div class="cat-label">Phones</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">🔌</div>
+      <div class="cat-label">Chargers</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">☂️</div>
+      <div class="cat-label">Umbrellas</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">⌚</div>
+      <div class="cat-label">Watches</div>
+    </div>
+    <div class="cat">
+      <div class="cat-circle">🎒</div>
+      <div class="cat-label">Bags</div>
     </div>
   </div>
-</section>
-
-<section class="how" id="how">
+</div>
+<section class="section" id="how">
   <div class="wrap">
     <div class="section-head">
-      <span class="section-eyebrow">The process</span>
-      <h2>Three steps close most cases</h2>
+      <div class="section-eyebrow">Process</div>
+      <h2 class="section-title">Three steps, one board.</h2>
+      <p class="section-sub">No forms buried in email. Report an item, let the board do the matching, and pick it up with a ticket.</p>
     </div>
-    <div class="steps">
-      <div class="step">
-        <span class="step-no mono">01</span>
-        <h3>Report</h3>
-        <p>Log what you lost, or what you found — a photo, category, and the spot on campus is all it takes.</p>
+    <div class="how-grid">
+      <div class="how-card">
+        <span class="how-tab">STEP 1 · FILE</span>
+        <h3>Log it</h3>
+        <p>Lost something or found something lying around? File a two-minute report with a photo, category, and where it turned up.</p>
       </div>
-      <div class="step">
-        <span class="step-no mono">02</span>
-        <h3>Match</h3>
-        <p>Findify checks new reports against the existing log and flags likely matches for both sides to review.</p>
+      <div class="how-card">
+        <span class="how-tab">STEP 2 · MATCH</span>
+        <h3>Get matched</h3>
+        <p>Findify checks your report against the board by category, location, and date, and flags likely matches for you to review.</p>
       </div>
-      <div class="step">
-        <span class="step-no mono">03</span>
-        <h3>Claim</h3>
-        <p>Confirm details with the finder or the college help desk, then mark the item as claimed and closed.</p>
+      <div class="how-card">
+        <span class="how-tab">STEP 3 · CLAIM</span>
+        <h3>Pick it up</h3>
+        <p>Confirm it's yours, get a claim ticket, and collect your item at the nearest drop point — no chasing announcements.</p>
       </div>
     </div>
   </div>
 </section>
-
-<section class="browse" id="browse">
+<section class="section" id="found" style="padding-top:0;">
   <div class="wrap">
-    <div class="browse-head">
+    <div class="items-toolbar">
       <div class="section-head" style="margin-bottom:0;">
-        <span class="section-eyebrow">Live log</span>
-        <h2>Browse recent items</h2>
-      </div>
-      <div class="chips" id="chips">
-        <button class="chip active" data-filter="all">All</button>
-        <button class="chip" data-filter="lost">Lost</button>
-        <button class="chip" data-filter="found">Found</button>
-        <button class="chip" data-filter="claimed">Claimed</button>
+        <div class="section-eyebrow">The Board</div>
+        <h2 class="section-title">Recently found on campus</h2>
       </div>
     </div>
-    <div class="grid" id="grid">
-      <div class="tag-card" data-status="lost">
-        <div class="tag-stub"><span class="mono">FND-0521</span></div>
-        <div class="tag-body">
-          <div class="tag-top"><div><h4>Grey Hoodie, size M</h4><div class="tag-meta">Basketball Court</div></div><span class="stamp lost">LOST</span></div>
-          <div class="tag-id mono">Reported 1 hr ago</div>
+    <div class="items-grid">
+      <div class="ticket">
+        <div class="photo">🎧</div>
+        <div class="ticket-notch-l"></div><div class="ticket-notch-r"></div>
+        <div class="ticket-body">
+          <div class="ticket-id mono">#FND-2295</div>
+          <h3 class="ticket-name">Black Wired Earbuds</h3>
+          <div class="status-chip">Unclaimed</div>
+          <div class="ticket-meta">
+            <span>📍 Cafeteria, Table 6</span>
+            <span>🗓 Jul 16, 2026</span>
+          </div>
+          <a href="verify.html" class="ticket-cta">Claim This Item</a>
         </div>
       </div>
-      <div class="tag-card" data-status="found">
-        <div class="tag-stub"><span class="mono">FND-0518</span></div>
-        <div class="tag-body">
-          <div class="tag-top"><div><h4>Prescription Glasses</h4><div class="tag-meta">Chemistry Lab</div></div><span class="stamp found">FOUND</span></div>
-          <div class="tag-id mono">Reported 4 hrs ago</div>
+      <div class="ticket">
+        <div class="photo">🆔</div>
+        <div class="ticket-notch-l"></div><div class="ticket-notch-r"></div>
+        <div class="ticket-body">
+          <div class="ticket-id mono">#FND-2297</div>
+          <h3 class="ticket-name">Student ID — R. Sharma</h3>
+          <div class="status-chip">Unclaimed</div>
+          <div class="ticket-meta">
+            <span>📍 Main Gate 2</span>
+            <span>🗓 Jul 17, 2026</span>
+          </div>
+          <a href="verify.html" class="ticket-cta">Claim This Item</a>
         </div>
       </div>
-      <div class="tag-card" data-status="lost">
-        <div class="tag-stub"><span class="mono">FND-0514</span></div>
-        <div class="tag-body">
-          <div class="tag-top"><div><h4>Scientific Calculator</h4><div class="tag-meta">Exam Hall B</div></div><span class="stamp lost">LOST</span></div>
-          <div class="tag-id mono">Reported 6 hrs ago</div>
+      <div class="ticket">
+        <div class="photo">🕶️</div>
+        <div class="ticket-notch-l"></div><div class="ticket-notch-r"></div>
+        <div class="ticket-body">
+          <div class="ticket-id mono">#FND-2278</div>
+          <h3 class="ticket-name">Silver Ray-Ban Sunglasses</h3>
+          <div class="status-chip">Unclaimed</div>
+          <div class="ticket-meta">
+            <span>📍 Parking Lot B</span>
+            <span>🗓 Jul 12, 2026</span>
+          </div>
+          <a href="verify.html" class="ticket-cta">Claim This Item</a>
         </div>
       </div>
-      <div class="tag-card" data-status="found">
-        <div class="tag-stub"><span class="mono">FND-0507</span></div>
-        <div class="tag-body">
-          <div class="tag-top"><div><h4>Metro Card</h4><div class="tag-meta">Bus Stop, Gate 2</div></div><span class="stamp found">FOUND</span></div>
-          <div class="tag-id mono">Reported yesterday</div>
-        </div>
-      </div>
-      <div class="tag-card" data-status="claimed">
-        <div class="tag-stub"><span class="mono">FND-0489</span></div>
-        <div class="tag-body">
-          <div class="tag-top"><div><h4>Denim Jacket</h4><div class="tag-meta">Amphitheatre</div></div><span class="stamp claimed">CLAIMED</span></div>
-          <div class="tag-id mono">Returned Mon, 11:40 AM</div>
-        </div>
-      </div>
-      <div class="tag-card" data-status="claimed">
-        <div class="tag-stub"><span class="mono">FND-0476</span></div>
-        <div class="tag-body">
-          <div class="tag-top"><div><h4>Wireless Mouse</h4><div class="tag-meta">Computer Lab 2</div></div><span class="stamp claimed">CLAIMED</span></div>
-          <div class="tag-id mono">Returned Fri, 3:05 PM</div>
-        </div>
-      </div>
+    </div>
+    <div class="view-all-row">
+      <a href="found.html" class="link-underline" id="viewAllBtn">View all Found items →</a>
     </div>
   </div>
 </section>
-
 <section class="cta-band" id="report">
   <div class="wrap">
-    <h2>Report a lost or found item in under two minutes</h2>
-    <p>No sign-up walls, no lost forms at the help desk. Just the details that help someone find their way back to their things.</p>
-    <div class="cta-actions">
-      <a href="#" class="btn btn-amber">Report an item</a>
-      <a href="#browse" class="btn btn-outline">Browse the log</a>
-    </div>
+    <h2>Lost something today?</h2>
+    <p>Filing a report takes less time than walking back to check.</p>
+    <a href="report.html" class="btn btn-primary">Report a Lost Item</a>
   </div>
 </section>
-
 <footer>
-  <div class="wrap footer-row">
-    <div>Findify — a campus lost &amp; found project.</div>
-    <div class="footer-links">
-      <a href="#how">How it works</a>
-      <a href="#browse">Browse</a>
-      <a href="#report">Report</a>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">FINDIFY</div>
+        <p>A campus lost &amp; found board that actually gets things back to people. Built as a student project to make reporting and claiming items simple.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Findify</h4>
+        <ul>
+          <li><a href="#found">Browse Found</a></li>
+          <li><a href="report.html">Report Lost</a></li>
+          <li><a href="#how">How it Works</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Campus</h4>
+        <ul>
+          <li><a href="rules.html">Rules &amp; FAQ</a></li>
+          <li><a href="contact.html">Contact Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Project</h4>
+        <ul>
+          <li><a href="about.html">About This Build</a></li>
+          <li><a href="#">GitHub Repo</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span id="copyright">© 2026 FINDIFY — COLLEGE PROJECT</span>
+      <span>TICKET #FND-0001 · ISSUED CAMPUS-WIDE</span>
     </div>
   </div>
 </footer>
-
-<script>
-  const chips = document.querySelectorAll('.chip');
-  const cards = document.querySelectorAll('#grid .tag-card');
-  chips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      chips.forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      const filter = chip.dataset.filter;
-      cards.forEach(card => {
-        card.style.display = (filter === 'all' || card.dataset.status === filter) ? 'flex' : 'none';
-      });
-    });
-  });
-</script>
-
+<script src="js/main.js"></script>
 </body>
 </html>
