@@ -1,0 +1,81 @@
+body {
+    margin: 0;
+    padding: 40px;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #b8864b; /* Cork board color */
+    background-image:
+        radial-gradient(#c89a5c 2px, transparent 2px),
+        radial-gradient(#a8733f 2px, transparent 2px);
+    background-size: 30px 30px;
+    background-position: 0 0, 15px 15px;
+}
+
+.container {
+    width: 600px;
+    margin: auto;
+    background: #fffdf5;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+/* Pin */
+.container::before {
+    content: "";
+    width: 18px;
+    height: 18px;
+    background: crimson;
+    border-radius: 50%;
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 4px rgba(0,0,0,.4);
+}
+
+h1 {
+    color: #5d4037;
+    text-align: center;
+}
+
+h2 {
+    color: #6d4c41;
+}
+
+h3 {
+    color: #795548;
+}
+
+p {
+    font-size: 16px;
+    color: #444;
+}
+
+hr {
+    border: none;
+    border-top: 2px dashed #bca28b;
+    margin: 20px 0;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+a {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    background: #8d6e63;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 5px;
+}
+
+a:hover {
+    background: #6d4c41;
+}

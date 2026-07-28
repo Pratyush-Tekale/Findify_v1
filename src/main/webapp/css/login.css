@@ -1,0 +1,341 @@
+:root{
+    --bg:#F3EEE1;
+    --board:#BC9468;
+    --board-dark:#a67e54;
+    --ink:#221E1A;
+    --navy:#22303F;
+    --amber:#E3A343;
+    --red:#B33A2D;
+    --card:#FBF7EE;
+    --card-line:#d8cdb4;
+    --muted:#6b6255;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:
+    radial-gradient(circle at 20% 20%, rgba(0,0,0,.04) 0, transparent 3%),
+    radial-gradient(circle at 70% 50%, rgba(0,0,0,.04) 0, transparent 3%),
+    linear-gradient(180deg,var(--board),var(--board-dark));
+    min-height:100vh;
+}
+
+/* HEADER */
+
+header{
+    background:rgba(243,238,225,.95);
+    border-bottom:2px dashed var(--card-line);
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:18px 60px;
+}
+
+.logo{
+    font-family:'Special Elite',cursive;
+    font-size:30px;
+    color:var(--ink);
+    letter-spacing:2px;
+}
+
+.back-btn{
+    text-decoration:none;
+    color:white;
+    background:var(--navy);
+    padding:10px 20px;
+    border-radius:4px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.back-btn:hover{
+    background:var(--red);
+}
+
+/* LOGIN SECTION */
+
+.login-section{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:80px 20px;
+}
+
+/* CARD */
+
+.login-card{
+
+    width:430px;
+
+    background:var(--card);
+
+    border:2px solid var(--ink);
+
+    border-radius:8px;
+
+    position:relative;
+
+    padding:40px;
+
+    box-shadow:8px 10px 0 rgba(0,0,0,.25);
+
+}
+
+/* Tape */
+
+.paper-tape{
+
+    width:120px;
+
+    height:18px;
+
+    background:rgba(227,163,67,.55);
+
+    position:absolute;
+
+    top:-10px;
+
+    left:50%;
+
+    transform:translateX(-50%) rotate(-4deg);
+
+    border:1px solid rgba(0,0,0,.15);
+
+}
+
+.login-card h4{
+
+    text-align:center;
+
+    font-family:'JetBrains Mono',monospace;
+
+    color:var(--red);
+
+    letter-spacing:2px;
+
+    margin-bottom:10px;
+
+}
+
+.login-card h1{
+
+    text-align:center;
+
+    font-family:'Special Elite',cursive;
+
+    margin-bottom:15px;
+
+    font-size:36px;
+
+    color:var(--ink);
+
+}
+
+.login-card p{
+
+    text-align:center;
+
+    color:var(--muted);
+
+    line-height:1.6;
+
+    margin-bottom:30px;
+
+}
+
+/* INPUTS */
+
+.input-group{
+
+    margin-bottom:22px;
+
+}
+
+.input-group label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-weight:600;
+
+    color:var(--ink);
+
+}
+
+.input-group input{
+
+    width:100%;
+    height:50px;
+    padding:14px;
+
+    border:2px solid var(--card-line);
+
+    background:white;
+
+    border-radius:4px;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+
+.input-group input:focus{
+
+    outline:none;
+
+    border-color:var(--red);
+
+}
+
+/* BUTTON */
+
+.login-btn{
+
+    width:100%;
+
+    padding:15px;
+
+    background:var(--navy);
+
+    color:white;
+
+    border:none;
+
+    border-radius:4px;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.login-btn:hover{
+
+    background:var(--red);
+
+}
+
+/* LINKS */
+
+.links{
+
+    text-align:right;
+
+    margin-top:15px;
+
+}
+
+.links a{
+
+    text-decoration:none;
+
+    color:var(--navy);
+
+    font-size:14px;
+
+}
+
+.links a:hover{
+
+    color:var(--red);
+
+}
+
+/* REGISTER */
+
+.register{
+
+    margin-top:30px;
+
+    text-align:center;
+
+    color:var(--muted);
+
+}
+
+.register a{
+
+    color:var(--red);
+
+    font-weight:bold;
+
+    text-decoration:none;
+
+}
+
+.register a:hover{
+
+    text-decoration:underline;
+
+}
+
+/* RESPONSIVE */
+
+@media(max-width:600px){
+
+header{
+
+padding:18px 20px;
+
+}
+
+.logo{
+
+font-size:22px;
+
+}
+
+.login-card{
+
+width:100%;
+
+padding:30px;
+
+}
+
+.login-card h1{
+
+font-size:28px;
+
+}
+
+}
+
+.password-box{
+    position:relative;
+    width:100%;
+}
+
+.password-box input{
+    width:100%;
+    padding:14px 50px 14px 14px;
+}
+
+.toggle-password{
+    position:absolute;
+    top:50%;
+    right:15px;
+    transform:translateY(-50%);
+    cursor:pointer;
+    font-size:18px;
+    user-select:none;
+    color:#666;
+}
+
+.toggle-password:hover{
+    color:var(--red);
+}

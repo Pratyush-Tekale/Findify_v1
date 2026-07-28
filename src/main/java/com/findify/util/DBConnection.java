@@ -14,19 +14,19 @@ public class DBConnection {
 
     private static final String PASSWORD =
             "0000";
-
     public static Connection getConnection() {
 
         Connection con = null;
 
         try {
 
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
             con = DriverManager.getConnection(URL, USER, PASSWORD);
 
             System.out.println("Database Connected Successfully!");
 
-        } catch (SQLException e) {
-
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
