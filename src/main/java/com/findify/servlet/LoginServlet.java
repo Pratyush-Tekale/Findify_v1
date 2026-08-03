@@ -40,19 +40,20 @@ public class LoginServlet extends HttpServlet {
 
     	    session.setAttribute("loggedInUser", user);
 
-    	    if("ADMIN".equals(user.getRole())){
+    	    if ("ADMIN".equals(user.getRole())) {
 
-    	        request.getRequestDispatcher("adminDashboard.jsp")
-    	               .forward(request,response);
+    	        response.sendRedirect("AdminDashboardServlet");
 
-    	    }else{
+    	    } else {
 
-    	        request.getRequestDispatcher("loginSuccess.jsp")
-    	               .forward(request,response);
+    	        response.sendRedirect("index.html");
 
     	    }
 
-    	}else{
+    	    }
+
+    	
+    	else{
 
     	    request.setAttribute("error","Invalid Email or Password");
 

@@ -1,46 +1,391 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
 <%
-com.findify.model.User user =
+com.findify.model.User loggedInUser =
 (com.findify.model.User)session.getAttribute("loggedInUser");
 
-if(user == null){
-    response.sendRedirect("login.jsp");
-    return;
+if(loggedInUser==null){
+response.sendRedirect("login.jsp");
+return;
+}
+
+if(!"ADMIN".equals(loggedInUser.getRole())){
+response.sendRedirect("login.jsp");
+return;
 }
 %>
-
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Admin Dashboard</title>
+<html lang="en">
 
-    <link rel="stylesheet" href="css/dashboard.css">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Findify | Admin Dashboard</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/admin.css">
+
 </head>
+
 <body>
 
-<div class="container">
+<header class="site-header">
 
-    <h1>Admin Dashboard</h1>
+<div class="wrap">
 
-    <h2>Welcome <%= user.getFullName() %></h2>
+    <nav>
 
-    <p><strong>Email:</strong> <%= user.getEmail() %></p>
+        <a href="AdminDashboardServlet" class="logo">
+            FINDIFY
+            <span class="admin-badge">
+                Admin
+            </span>
+        </a>
 
-    <p><strong>Role:</strong> <%= user.getRole() %></p>
+        <div class="links">
 
-    <hr>
+            <a href="AdminDashboardServlet" class="active">
+                Dashboard
+            </a>
 
-    <h3>Modules</h3>
+            <a href="#pendingClaims">
+                Manage Claims
+            </a>
 
-    <ul>
-        <li>Manage Claims (Coming Soon)</li>
-        <li>View Lost Items (Coming Soon)</li>
-        <li>View Found Items (Coming Soon)</li>
-    </ul>
+            <a href="found.html">
+                Found Items
+            </a>
 
-    <a href="index.html">Home</a>
+            <a href="lost.html">
+                Lost Items
+            </a>
+
+        </div>
+
+        <a href="LogoutServlet" class="nav-cta ghost">
+            Logout
+        </a>
+
+    </nav>
 
 </div>
 
+</header>
+
+<section class="section">
+<div class="wrap">
+
+<div class="section-head">
+
+<h2 class="section-title">
+
+Welcome,
+
+${loggedInUser.fullName}
+
+</h2>
+
+<p class="section-sub">
+
+Manage campus claims and monitor all lost & found activities.
+
+</p>
+
+</div>
+<div class="admin-stat-grid">
+
+    <div class="admin-stat-card">
+
+        <div class="a-num">${totalUsers}</div>
+
+        <div class="a-label">
+            Total Users
+        </div>
+
+    </div>
+
+    <div class="admin-stat-card">
+
+        <div class="a-num">${totalLostItems}</div>
+
+        <div class="a-label">
+            Lost Items
+        </div>
+
+    </div>
+
+    <div class="admin-stat-card">
+
+        <div class="a-num">${totalFoundItems}</div>
+
+        <div class="a-label">
+            Found Items
+        </div>
+
+    </div>
+
+    <div class="admin-stat-card">
+
+        <div class="a-num">${pendingClaimsCount}</div>
+
+        <div class="a-label">
+            Pending Claims
+        </div>
+
+    </div>
+
+    <div class="admin-stat-card">
+
+        <div class="a-num">${approvedClaimsCount}</div>
+
+        <div class="a-label">
+            Approved Claims
+        </div>
+
+    </div>
+
+    <div class="admin-stat-card">
+
+        <div class="a-num">${rejectedClaimsCount}</div>
+
+        <div class="a-label">
+            Rejected Claims
+        </div>
+
+    </div>
+
+</div>
+<form action="AdminDashboardServlet" method="get" class="filter-bar">
+
+<input
+type="text"
+name="search"
+placeholder="Search Item">
+
+<select name="status">
+
+<option value="">
+All Status
+</option>
+
+<option value="PENDING">
+Pending
+</option>
+
+<option value="APPROVED">
+Approved
+</option>
+
+<option value="REJECTED">
+Rejected
+</option>
+
+</select>
+
+<button type="submit">
+
+Search
+
+</button>
+
+</form>
+
+<div class="section-head" id="pendingClaims">
+
+<h2 class="section-title">
+
+Pending Claims
+
+</h2>
+
+<p class="section-sub">
+
+Review and verify all submitted claim requests.
+
+</p>
+
+</div>
+
+<div class="table-wrap">
+
+<table class="table-ticket">
+
+<thead>
+
+<tr>
+
+<th>Claim ID</th>
+
+<th>Found Item ID</th>
+
+<th>Claimant ID</th>
+
+<th>Proof</th>
+
+<th>Claim Date</th>
+
+<th>Status</th>
+
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<c:choose>
+
+<c:when test="${empty pendingClaims}">
+
+<tr>
+
+<td colspan="7" style="text-align:center;">
+
+No Pending Claims Found
+
+</td>
+
+</tr>
+
+</c:when>
+
+<c:otherwise>
+
+<c:forEach var="claim" items="${pendingClaims}">
+
+<tr>
+
+<td>${claim.claimId}</td>
+
+<td>${claim.foundId}</td>
+
+<td>${claim.claimantId}</td>
+
+<td>${claim.proof}</td>
+
+<td>
+
+<fmt:formatDate value="${claim.claimDate}" pattern="dd MMM yyyy HH:mm"/>
+
+</td>
+
+<td>
+
+<c:choose>
+
+<c:when test="${claim.status=='PENDING'}">
+
+<span class="badge badge-amber">
+
+Pending
+
+</span>
+
+</c:when>
+
+<c:when test="${claim.status=='APPROVED'}">
+
+<span class="badge badge-green">
+
+Approved
+
+</span>
+
+</c:when>
+
+<c:otherwise>
+
+<span class="badge badge-red">
+
+Rejected
+
+</span>
+
+</c:otherwise>
+
+</c:choose>
+
+</td>
+
+<td>
+
+<form action="ManageClaimsServlet" method="post" style="display:inline;">
+
+<input type="hidden" name="claimId" value="${claim.claimId}">
+
+<input type="hidden" name="action" value="approve">
+
+<button class="btn btn-approve">
+
+Approve
+
+</button>
+
+</form>
+
+<form action="ManageClaimsServlet" method="post" style="display:inline;">
+
+<input type="hidden" name="claimId" value="${claim.claimId}">
+
+<input type="hidden" name="action" value="reject">
+
+<button class="btn btn-reject">
+
+Reject
+
+</button>
+
+</form>
+
+</td>
+
+</tr>
+
+</c:forEach>
+
+</c:otherwise>
+
+</c:choose>
+
+</tbody>
+
+</table>
+</div>
+</div>
+</section>
+
+<footer class="site-footer">
+
+<div class="wrap">
+
+<div class="footer-bottom">
+
+<span>
+
+© 2026 FINDIFY
+
+</span>
+
+<span>
+
+Campus Lost & Found Admin Panel
+
+</span>
+
+</div>
+
+</div>
+
+</footer>
+
 </body>
+
 </html>
