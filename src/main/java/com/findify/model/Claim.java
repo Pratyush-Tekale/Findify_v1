@@ -12,6 +12,11 @@ public class Claim {
     private String status;
     private Timestamp claimDate;
     
+    private String itemName;
+    private String claimantName;
+    private String claimantPhone;
+    
+    private int trustScore;
     
     public Claim() {
     }
@@ -32,6 +37,38 @@ public class Claim {
     
     
     
+	public int getTrustScore() {
+		return trustScore;
+	}
+
+	public void setTrustScore(int trustScore) {
+		this.trustScore = trustScore;
+	}
+
+	public String getItemName() {
+		return itemName;
+	}
+
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
+	public String getClaimantName() {
+		return claimantName;
+	}
+
+	public void setClaimantName(String claimantName) {
+		this.claimantName = claimantName;
+	}
+
+	public String getClaimantPhone() {
+		return claimantPhone;
+	}
+
+	public void setClaimantPhone(String claimantPhone) {
+		this.claimantPhone = claimantPhone;
+	}
+
 	public int getClaimId() {
 		return claimId;
 	}

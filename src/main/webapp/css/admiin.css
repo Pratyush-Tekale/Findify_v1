@@ -120,3 +120,87 @@ nav{
   color:var(--muted); border:1px dashed var(--card-line); border-radius:10px;
   padding:2px 8px; text-transform:uppercase;
 }
+/* ===========================
+   Claims Table
+=========================== */
+
+.table-wrap{
+    width:100%;
+    overflow-x:auto;
+    margin-top:30px;
+}
+
+.table-ticket{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.table-ticket th,
+.table-ticket td{
+    padding:18px;
+    text-align:left;
+    vertical-align:middle;
+    white-space:nowrap;
+}
+
+.table-ticket th{
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    border-bottom:2px solid var(--ink);
+}
+
+.table-ticket td{
+    border-bottom:1px solid rgba(0,0,0,.08);
+}
+
+/* Column widths */
+
+.table-ticket th:nth-child(2),
+.table-ticket td:nth-child(2){
+    min-width:180px;
+}
+
+.table-ticket th:nth-child(3),
+.table-ticket td:nth-child(3){
+    min-width:170px;
+}
+
+.table-ticket th:nth-child(4),
+.table-ticket td:nth-child(4){
+    min-width:130px;
+}
+
+.table-ticket th:nth-child(6),
+.table-ticket td:nth-child(6){
+    min-width:170px;
+}
+
+.table-ticket th:last-child,
+.table-ticket td:last-child{
+    min-width:220px;
+}
+
+/* Proof */
+
+.proof-text{
+    display:inline-block;
+    width:220px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+/* Buttons */
+
+.btn-approve,
+.btn-reject{
+    padding:8px 14px;
+    margin-right:8px;
+}
+
+/* Completed */
+
+.completed{
+    color:#777;
+    font-style:italic;
+}

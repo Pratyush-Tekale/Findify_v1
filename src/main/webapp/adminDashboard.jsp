@@ -30,7 +30,7 @@ return;
 <title>Findify | Admin Dashboard</title>
 
 <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/admiin.css">
 
 </head>
 
@@ -50,7 +50,9 @@ return;
         </a>
 
         <div class="links">
-
+			<a href="index.html" >
+			Home
+			</a>
             <a href="AdminDashboardServlet" class="active">
                 Dashboard
             </a>
@@ -223,9 +225,11 @@ Review and verify all submitted claim requests.
 
 <th>Claim ID</th>
 
-<th>Found Item ID</th>
+<th>Item</th>
 
-<th>Claimant ID</th>
+<th>Claimed By</th>
+
+<th>Phone</th>
 
 <th>Proof</th>
 
@@ -247,9 +251,9 @@ Review and verify all submitted claim requests.
 
 <tr>
 
-<td colspan="7" style="text-align:center;">
+<td colspan="8" style="text-align:center;">
 
-No Pending Claims Found
+No Claims Found
 
 </td>
 
@@ -265,15 +269,45 @@ No Pending Claims Found
 
 <td>${claim.claimId}</td>
 
-<td>${claim.foundId}</td>
+<td>${claim.itemName}</td>
 
-<td>${claim.claimantId}</td>
+<td>${claim.claimantName}</td>
 
-<td>${claim.proof}</td>
+<td>${claim.claimantPhone}</td>
+
+<td>
+    <span class="proof-text" title="${claim.proof}">
+        ${claim.proof}
+    </span>
+</td>
+
+<td>
+<fmt:formatDate value="${claim.claimDate}" pattern="dd MMM yyyy HH:mm"/>
+</td>
 
 <td>
 
-<fmt:formatDate value="${claim.claimDate}" pattern="dd MMM yyyy HH:mm"/>
+<c:choose>
+
+<c:when test="${claim.status=='PENDING'}">
+<span class="badge badge-amber">
+Pending
+</span>
+</c:when>
+
+<c:when test="${claim.status=='APPROVED'}">
+<span class="badge badge-green">
+Approved
+</span>
+</c:when>
+
+<c:otherwise>
+<span class="badge badge-red">
+Rejected
+</span>
+</c:otherwise>
+
+</c:choose>
 
 </td>
 
@@ -283,40 +317,6 @@ No Pending Claims Found
 
 <c:when test="${claim.status=='PENDING'}">
 
-<span class="badge badge-amber">
-
-Pending
-
-</span>
-
-</c:when>
-
-<c:when test="${claim.status=='APPROVED'}">
-
-<span class="badge badge-green">
-
-Approved
-
-</span>
-
-</c:when>
-
-<c:otherwise>
-
-<span class="badge badge-red">
-
-Rejected
-
-</span>
-
-</c:otherwise>
-
-</c:choose>
-
-</td>
-
-<td>
-
 <form action="ManageClaimsServlet" method="post" style="display:inline;">
 
 <input type="hidden" name="claimId" value="${claim.claimId}">
@@ -324,9 +324,7 @@ Rejected
 <input type="hidden" name="action" value="approve">
 
 <button class="btn btn-approve">
-
 Approve
-
 </button>
 
 </form>
@@ -338,12 +336,22 @@ Approve
 <input type="hidden" name="action" value="reject">
 
 <button class="btn btn-reject">
-
 Reject
-
 </button>
 
 </form>
+
+</c:when>
+
+<c:otherwise>
+
+<span class="completed">
+Completed
+</span>
+
+</c:otherwise>
+
+</c:choose>
 
 </td>
 

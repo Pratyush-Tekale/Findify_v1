@@ -40,9 +40,60 @@ public class UserDAO {
 			}
 		return null;
     			}
-    		
+    public boolean register(User user) {
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            System.out.println("Connected to DB");
+
+            String sql = "INSERT INTO users(full_name,email,phone,password,role) VALUES(?,?,?,?,?)";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPhone());
+            ps.setString(4, user.getPassword());
+            ps.setString(5, user.getRole());
+
+            int rows = ps.executeUpdate();
+
+            System.out.println("Rows inserted = " + rows);
+
+            return rows > 0;
+
+        } catch (SQLException e) {
+            System.out.println("SQL ERROR:");
+            e.printStackTrace();
+        }
+
+        return false;
+    }    		
     	
+    public int getTotalUsers() {
 
-  
+        try (Connection con = DBConnection.getConnection()) {
 
-}
+            String sql = "SELECT COUNT(*) FROM users";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                return rs.getInt(1);
+
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println("SQL ERROR:");
+
+            e.printStackTrace();
+
+        }
+
+        return 0;
+    }
+    }

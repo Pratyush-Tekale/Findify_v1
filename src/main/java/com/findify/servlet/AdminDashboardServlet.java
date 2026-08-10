@@ -1,4 +1,5 @@
 package com.findify.servlet;
+import com.findify.dao.UserDAO;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,32 +28,38 @@ public class AdminDashboardServlet extends HttpServlet {
             throws ServletException, IOException {
 
     	ClaimDAO dao = new ClaimDAO();
-
     	String status = request.getParameter("status");
-
+    	String search = request.getParameter("search");
     	List<Claim> claims;
+    	if(search != null && !search.isEmpty()){
 
-    	if (status == null || status.isEmpty()) {
+    	    claims = dao.searchClaims(search);
 
-    	    claims = dao.getAllClaims();
-
-    	} else {
+    	}
+    	else if(status != null && !status.isEmpty()){
 
     	    claims = dao.getClaimsByStatus(status);
 
     	}
+    	else{
 
-    	request.setAttribute("pendingClaims", claims);
+    	    claims = dao.getAllClaims();
+
+    	}
+    	
+    	request.setAttribute("pendingClaims",
+    	        claims);
 
     	request.setAttribute("pendingClaimsCount",
-    	        claims.size());
+    	        dao.getPendingClaimsCount());
 
-        request.setAttribute("approvedClaimsCount", 0);
+        request.setAttribute("approvedClaimsCount", dao.getApprovedClaimsCount());
 
-        request.setAttribute("rejectedClaimsCount", 0);
+        request.setAttribute("rejectedClaimsCount", dao.getRejectedClaimsCount());
 
-        request.setAttribute("totalUsers", 0);
+        UserDAO userDao = new UserDAO();
 
+        request.setAttribute("totalUsers", userDao.getTotalUsers());
         request.setAttribute("totalLostItems", 0);
 
         request.setAttribute("totalFoundItems", 0);
@@ -60,5 +67,4 @@ public class AdminDashboardServlet extends HttpServlet {
         request.getRequestDispatcher("adminDashboard.jsp")
                .forward(request, response);
     }
-
 }

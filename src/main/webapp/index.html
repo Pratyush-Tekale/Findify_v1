@@ -20,11 +20,13 @@
         </svg>
         FINDIFY
       </a>
-      <ul class="links">
-        <li><a href="#report">Report Lost</a></li>
-        <li><a href="#found">Browse Found</a></li>
-        <li><a href="#how">How it Works</a></li>
+      <ul class="links"> 
+        <li><a href="#how">How it Works</a></li> 
+        <li><a href="contact.html">Contact us</a></li>
       </ul>
+
+
+</ul>
       <a href="login.jsp" class="nav-cta" id="loginBtn">
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M20 21a8 8 0 0 0-16 0"/>
@@ -45,9 +47,24 @@
       </h1>
       <p class="lead">Findify keeps a running log of everything found around campus — books, IDs, earbuds, bottles, etc — so you can search it, claim it, and get back to class. Report what you lost in under a minute.</p>
       <div class="hero-ctas">
-        <a href="report.html" class="btn btn-primary" id="reportBtn">Report a Lost Item</a>
-        <a href="found.html" class="btn btn-secondary">Browse Found Items</a>
-      </div>
+
+    <a href="report.html" class="btn btn-primary">
+        Report Lost Item
+    </a>
+
+    <a href="BrowseLostItemsServlet" class="btn btn-secondary">
+        Browse Lost Items
+    </a>
+
+    <a href="reportfound.html" class="btn btn-primary">
+        Report Found Item
+    </a>
+
+    <a href="ViewFoundServlet" class="btn btn-secondary">
+        Browse Found Items
+    </a>
+
+</div>
     </div>
     <div class="tag-hang-wrap">
       <div class="pin"></div>
@@ -161,6 +178,119 @@
     </div>
   </div>
 </div>
+<section class="section quick-access">
+
+<div class="wrap">
+
+<div class="section-head">
+
+<div class="section-eyebrow">
+Quick Access
+</div>
+
+<h2 class="section-title">
+What would you like to do?
+</h2>
+
+<p class="section-sub">
+Choose any option to get started with Findify.
+</p>
+
+</div>
+
+
+<div class="how-grid">
+
+
+<div class="how-card">
+
+<span class="how-tab">
+REPORT
+</span>
+
+<h3>
+📢 Report Lost Item
+</h3>
+
+<p>
+Lost something on campus? Submit a report so others can help find it.
+</p>
+
+<a href="report.html" class="ticket-cta">
+Open →
+</a>
+
+</div>
+
+
+<div class="how-card">
+
+<span class="how-tab">
+BROWSE
+</span>
+
+<h3>
+🔍 Browse Lost Items
+</h3>
+
+<p>
+View recently reported lost items across the campus.
+</p>
+
+<a href="BrowseLostItemsServlet" class="ticket-cta">
+Browse →
+</a>
+
+</div>
+
+
+<div class="how-card">
+
+<span class="how-tab">
+REPORT
+</span>
+
+<h3>
+📦 Report Found Item
+</h3>
+
+<p>
+Found an item? Report it and help reunite it with its owner.
+</p>
+
+<a href="reportfound.html" class="ticket-cta">
+Open →
+</a>
+
+</div>  
+
+
+
+<div class="how-card">
+
+<span class="how-tab">
+BROWSE
+</span>
+
+<h3>
+✅ Browse Found Items
+</h3>
+
+<p>
+See all found items waiting to be claimed by their owners.
+</p>
+
+<a href="ViewFoundServlet" class="ticket-cta">
+Browse →
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
 <section class="section" id="how">
   <div class="wrap">
     <div class="section-head">
@@ -187,63 +317,7 @@
     </div>
   </div>
 </section>
-<section class="section" id="found" style="padding-top:0;">
-  <div class="wrap">
-    <div class="items-toolbar">
-      <div class="section-head" style="margin-bottom:0;">
-        <div class="section-eyebrow">The Board</div>
-        <h2 class="section-title">Recently found on campus</h2>
-      </div>
-    </div>
-    <div class="items-grid">
-      <div class="ticket">
-        <div class="photo">🎧</div>
-        <div class="ticket-notch-l"></div><div class="ticket-notch-r"></div>
-        <div class="ticket-body">
-          <div class="ticket-id mono">#FND-2295</div>
-          <h3 class="ticket-name">Black Wired Earbuds</h3>
-          <div class="status-chip">Unclaimed</div>
-          <div class="ticket-meta">
-            <span>📍 Cafeteria, Table 6</span>
-            <span>🗓 Jul 16, 2026</span>
-          </div>
-          <a href="verify.html" class="ticket-cta">Claim This Item</a>
-        </div>
-      </div>
-      <div class="ticket">
-        <div class="photo">🆔</div>
-        <div class="ticket-notch-l"></div><div class="ticket-notch-r"></div>
-        <div class="ticket-body">
-          <div class="ticket-id mono">#FND-2297</div>
-          <h3 class="ticket-name">Student ID — R. Sharma</h3>
-          <div class="status-chip">Unclaimed</div>
-          <div class="ticket-meta">
-            <span>📍 Main Gate 2</span>
-            <span>🗓 Jul 17, 2026</span>
-          </div>
-          <a href="verify.html" class="ticket-cta">Claim This Item</a>
-        </div>
-      </div>
-      <div class="ticket">
-        <div class="photo">🕶️</div>
-        <div class="ticket-notch-l"></div><div class="ticket-notch-r"></div>
-        <div class="ticket-body">
-          <div class="ticket-id mono">#FND-2278</div>
-          <h3 class="ticket-name">Silver Ray-Ban Sunglasses</h3>
-          <div class="status-chip">Unclaimed</div>
-          <div class="ticket-meta">
-            <span>📍 Parking Lot B</span>
-            <span>🗓 Jul 12, 2026</span>
-          </div>
-          <a href="verify.html" class="ticket-cta">Claim This Item</a>
-        </div>
-      </div>
-    </div>
-    <div class="view-all-row">
-      <a href="found.html" class="link-underline" id="viewAllBtn">View all Found items →</a>
-    </div>
-  </div>
-</section>
+
 <section class="cta-band" id="report">
   <div class="wrap">
     <h2>Lost something today?</h2>
@@ -261,9 +335,10 @@
       <div class="footer-col">
         <h4>Findify</h4>
         <ul>
-          <li><a href="#found">Browse Found</a></li>
+          <li><a href="ViewFoundServlet">Browse Found</a></li>
           <li><a href="report.html">Report Lost</a></li>
-          <li><a href="#how">How it Works</a></li>
+          <li><a href="BrowseLostItemsServlet">Browse Lost</a></li>
+          <li><a href="reportfound.html">Report found</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -277,13 +352,14 @@
         <h4>Project</h4>
         <ul>
           <li><a href="about.html">About This Build</a></li>
-          <li><a href="#">GitHub Repo</a></li>
+          <li><a href="#how">How it Works</a></li>
+          <li><a href="https://github.com/Pratyush-Tekale/Findify_v1">GitHub Repo</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
       <span id="copyright">© 2026 FINDIFY — COLLEGE PROJECT</span>
-      <span>TICKET #FND-0001 · ISSUED CAMPUS-WIDE</span>
+      <span> ISSUED CAMPUS-WIDE</span>
     </div>
   </div>
 </footer>
