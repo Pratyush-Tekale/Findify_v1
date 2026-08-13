@@ -11,19 +11,25 @@ public class Claim {
     private String proof;
     private String status;
     private Timestamp claimDate;
-    
+
     private String itemName;
     private String claimantName;
     private String claimantPhone;
-    
+
+    // Details pulled in from found_items, for the admin claim-detail view
+    private String itemDescription;
+    private String locationFound;
+    private java.sql.Date dateFound;
+    private String itemImage;
+
     private int trustScore;
-    
+
     public Claim() {
     }
-    
+
     public Claim(int claimId, int foundId, int claimantId, String proof,
             String status, Timestamp claimDate) {
-    	
+
    this.claimId = claimId;
    this.foundId = foundId;
    this.claimantId = claimantId;
@@ -31,12 +37,8 @@ public class Claim {
    this.status = status;
    this.claimDate = claimDate;
 }
-    
-    
-    
-    
-    
-    
+
+
 	public int getTrustScore() {
 		return trustScore;
 	}
@@ -67,6 +69,38 @@ public class Claim {
 
 	public void setClaimantPhone(String claimantPhone) {
 		this.claimantPhone = claimantPhone;
+	}
+
+	public String getItemDescription() {
+		return itemDescription;
+	}
+
+	public void setItemDescription(String itemDescription) {
+		this.itemDescription = itemDescription;
+	}
+
+	public String getLocationFound() {
+		return locationFound;
+	}
+
+	public void setLocationFound(String locationFound) {
+		this.locationFound = locationFound;
+	}
+
+	public java.sql.Date getDateFound() {
+		return dateFound;
+	}
+
+	public void setDateFound(java.sql.Date dateFound) {
+		this.dateFound = dateFound;
+	}
+
+	public String getItemImage() {
+		return itemImage;
+	}
+
+	public void setItemImage(String itemImage) {
+		this.itemImage = itemImage;
 	}
 
 	public int getClaimId() {
@@ -110,9 +144,5 @@ public class Claim {
 		return "Claim [claimId=" + claimId + ", foundId=" + foundId + ", claimantId=" + claimantId + ", proof=" + proof
 				+ ", status=" + status + ", claimDate=" + claimDate + "]";
 	}
-    
-    
-    
-    
-    
+
 }

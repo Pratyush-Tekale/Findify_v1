@@ -4,6 +4,7 @@ import com.findify.model.User;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -75,11 +76,16 @@ public class FoundServlet extends HttpServlet {
                imagePart.getSize() > 0)
             {
 
-                imageName =
+                String originalName =
                 Paths.get(
                 imagePart.getSubmittedFileName())
                 .getFileName()
                 .toString();
+
+                // Prefix with a random UUID so two uploads with the same
+                // original filename (e.g. IMG_0001.jpg from a phone) never
+                // collide and overwrite each other on disk.
+                imageName = UUID.randomUUID().toString() + "_" + originalName;
 
                 String uploadPath =
                 getServletContext()
