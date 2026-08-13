@@ -1,5 +1,6 @@
 package com.findify.servlet;
-
+import jakarta.servlet.http.HttpSession;
+import com.findify.model.User;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.Part;
 import com.findify.dao.FoundItemDAO;
 import com.findify.model.FoundItem;
 
+@SuppressWarnings("serial")
 @WebServlet("/FoundServlet")
 @MultipartConfig
 public class FoundServlet extends HttpServlet {
@@ -42,11 +44,17 @@ public class FoundServlet extends HttpServlet {
 
 
 
-            // Temporary user ID
-            // Replace with session after login module
+            HttpSession session = request.getSession(false);
 
-            int userId = 1;
+            if(session == null || session.getAttribute("loggedInUser") == null){
+                response.sendRedirect("login.jsp");
+                return;
+            }
 
+            User loggedInUser =
+                    (User) session.getAttribute("loggedInUser");
+
+            int userId = loggedInUser.getUserId();
 
 
             // Category name -> Category ID

@@ -84,6 +84,7 @@ CREATE TABLE claims(
     status ENUM('PENDING','APPROVED','REJECTED')
     DEFAULT 'PENDING',
     claim_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    trust_score INT DEFAULT 0,
 		CONSTRAINT fk_claim_found
 		FOREIGN KEY(found_id)
 		REFERENCES found_items(found_id)

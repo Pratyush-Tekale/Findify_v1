@@ -1,5 +1,10 @@
 package com.findify.servlet;
 
+
+
+import com.findify.dao.FoundItemDAO;
+import com.findify.model.FoundItem;
+import com.findify.util.TrustScoreUtil;
 import java.io.IOException;
 
 import com.findify.dao.ClaimDAO;
@@ -44,13 +49,29 @@ public class ClaimServlet extends HttpServlet {
             return;
         }
 
+        
+        FoundItemDAO foundDao = new FoundItemDAO();
+
+        FoundItem foundItem = foundDao.getFoundItemById(foundId);
+
+        if (foundItem == null) {
+            response.sendRedirect("verify.jsp?foundId=" + foundId + "&error=itemnotfound");
+            return;
+        }
+
+        String description = foundItem.getDescription();
+
+        int trustScore =
+                TrustScoreUtil.calculateTrustScore(description, proof);
+        
         Claim claim = new Claim();
 
         claim.setFoundId(foundId);
         claim.setClaimantId(loggedInUser.getUserId());
         claim.setProof(proof);
         claim.setStatus("PENDING");
-
+        claim.setTrustScore(trustScore);
+        
         ClaimDAO dao = new ClaimDAO();
 
         boolean success = dao.addClaim(claim);

@@ -1,3 +1,4 @@
+
 package com.findify.dao;
 
 import java.util.List;
@@ -11,19 +12,22 @@ import com.findify.model.Claim;
 import com.findify.util.DBConnection;
 
 public class ClaimDAO {
-		
-	
-public boolean addClaim(Claim claim) {
+
+	public boolean addClaim(Claim claim) {
 
 	    try (Connection con = DBConnection.getConnection()) {
 
-	        String sql = "INSERT INTO claims (found_id, claimant_id, proof) VALUES (?,?,?)";
+	        String sql =
+	            "INSERT INTO claims(found_id, claimant_id, proof, status, trust_score) " +
+	            "VALUES (?, ?, ?, ?, ?)";
 
 	        PreparedStatement ps = con.prepareStatement(sql);
 
 	        ps.setInt(1, claim.getFoundId());
 	        ps.setInt(2, claim.getClaimantId());
 	        ps.setString(3, claim.getProof());
+	        ps.setString(4, claim.getStatus());
+	        ps.setInt(5, claim.getTrustScore());
 
 	        int rows = ps.executeUpdate();
 
@@ -34,345 +38,352 @@ public boolean addClaim(Claim claim) {
 	    }
 
 	    return false;
-	}	
-public List<Claim> getPendingClaims() {
+	}
 
-    List<Claim> claims = new ArrayList<>();
+    public List<Claim> getPendingClaims() {
 
-    try (Connection con = DBConnection.getConnection()) {
-    	String sql = "SELECT * FROM claims WHERE status = ?";
+        List<Claim> claims = new ArrayList<>();
 
-    	PreparedStatement ps = con.prepareStatement(sql);
+        try (Connection con = DBConnection.getConnection()) {
 
-    	ps.setString(1, "PENDING");
+            String sql = "SELECT * FROM claims WHERE status = ?";
 
-    	ResultSet rs = ps.executeQuery();
-    	
-    	while (rs.next()) {
+            PreparedStatement ps = con.prepareStatement(sql);
 
-    	    Claim claim = new Claim();
+            ps.setString(1, "PENDING");
 
-    	    claim.setClaimId(rs.getInt("claim_id"));
-    	    claim.setFoundId(rs.getInt("found_id"));
-    	    claim.setClaimantId(rs.getInt("claimant_id"));
-    	    claim.setProof(rs.getString("proof"));
-    	    claim.setStatus(rs.getString("status"));
-    	    claim.setClaimDate(rs.getTimestamp("claim_date"));
+            ResultSet rs = ps.executeQuery();
 
-    	    claims.add(claim);
-    	}
-    	
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
+            while (rs.next()) {
 
-    return claims;
-}
-public List<Claim> getClaimsByStatus(String status) {
+                Claim claim = new Claim();
 
-    List<Claim> claims = new ArrayList<>();
+                claim.setClaimId(rs.getInt("claim_id"));
+                claim.setFoundId(rs.getInt("found_id"));
+                claim.setClaimantId(rs.getInt("claimant_id"));
+                claim.setProof(rs.getString("proof"));
+                claim.setStatus(rs.getString("status"));
+                claim.setClaimDate(rs.getTimestamp("claim_date"));
+                claim.setTrustScore(rs.getInt("trust_score"));
+                
+                claims.add(claim);
+            }
 
-    try (Connection con = DBConnection.getConnection()) {
-
-        String sql = "SELECT\r\n"
-        		+ "c.*,\r\n"
-        		+ "f.item_name,\r\n"
-        		+ "u.full_name,\r\n"
-        		+ "u.phone\r\n"
-        		+ "FROM claims c\r\n"
-        		+ "JOIN found_items f\r\n"
-        		+ "ON c.found_id = f.found_id\r\n"
-        		+ "JOIN users u\r\n"
-        		+ "ON c.claimant_id = u.user_id\r\n"
-        		+ "WHERE c.status = ?\r\n"
-        		+ "ORDER BY c.claim_date DESC";
-
-        PreparedStatement ps = con.prepareStatement(sql);
-
-        ps.setString(1, status);
-
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-
-            Claim claim = new Claim();
-
-            claim.setClaimId(rs.getInt("claim_id"));
-            claim.setFoundId(rs.getInt("found_id"));
-            claim.setClaimantId(rs.getInt("claimant_id"));
-            claim.setProof(rs.getString("proof"));
-            claim.setStatus(rs.getString("status"));
-            claim.setClaimDate(rs.getTimestamp("claim_date"));
-            claim.setItemName(rs.getString("item_name"));
-
-            claim.setClaimantName(rs.getString("full_name"));
-
-            claim.setClaimantPhone(rs.getString("phone"));
-            claims.add(claim);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-
-    return claims;
-}
-
-public boolean approveClaim(int claimId)
-{
-	try(Connection con=DBConnection.getConnection())
-	{
-		String sql="UPDATE CLAIMS SET STATUS =? WHERE CLAIM_ID=?";
-		PreparedStatement ps = con.prepareStatement(sql);
-		
-		ps.setString(1, "APPROVED");
-		ps.setInt(2, claimId);
-	
-		int rows = ps.executeUpdate();
-		if (rows > 0) {
-		    return true;
-		}
-		else {
-			return false;
-		}
-	
-	}catch (SQLException e) {
-        e.printStackTrace();
+        return claims;
     }
 
 
-	return false;
-	}
+    public List<Claim> getClaimsByStatus(String status) {
 
-public boolean rejectClaim(int claimId)
-{
-	try(Connection con=DBConnection.getConnection())
-	{
-		String sql="UPDATE CLAIMS SET STATUS =? WHERE CLAIM_ID=?";
-		PreparedStatement ps = con.prepareStatement(sql);
-		
-		ps.setString(1, "REJECTED");
-		ps.setInt(2, claimId);
-	
-		int rows = ps.executeUpdate();
-		if (rows > 0) {
-		    return true;
-		}
-		else {
-			return false;
-		}
-	
-	}catch (SQLException e) {
-        e.printStackTrace();
-    }
+        List<Claim> claims = new ArrayList<>();
 
+        try (Connection con = DBConnection.getConnection()) {
 
-	return false;
-	}
-public Claim getClaimById(int claimId) {
+            String sql =
+                    "SELECT c.*, " +
+                    "f.item_name, " +
+                    "u.full_name, " +
+                    "u.phone " +
+                    "FROM claims c " +
+                    "LEFT JOIN found_items f " +
+                    "ON c.found_id = f.found_id " +
+                    "LEFT JOIN users u " +
+                    "ON c.claimant_id = u.user_id " +
+                    "WHERE c.status = ? " +
+                    "ORDER BY c.claim_date DESC";
 
-    try (Connection con = DBConnection.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(sql);
 
-        String sql = "SELECT * FROM claims WHERE claim_id = ?";
+            ps.setString(1, status);
 
-        PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
 
-        ps.setInt(1, claimId);
+            while (rs.next()) {
 
-        ResultSet rs = ps.executeQuery();
+                Claim claim = new Claim();
 
-        if (rs.next()) {
+                claim.setClaimId(rs.getInt("claim_id"));
+                claim.setFoundId(rs.getInt("found_id"));
+                claim.setClaimantId(rs.getInt("claimant_id"));
+                claim.setProof(rs.getString("proof"));
+                claim.setStatus(rs.getString("status"));
+                claim.setClaimDate(rs.getTimestamp("claim_date"));
 
-            Claim claim = new Claim();
+                claim.setItemName(rs.getString("item_name"));
+                claim.setClaimantName(rs.getString("full_name"));
+                claim.setClaimantPhone(rs.getString("phone"));
+                claim.setTrustScore(rs.getInt("trust_score"));
+                
+                claims.add(claim);
+            }
 
-            claim.setClaimId(rs.getInt("claim_id"));
-            claim.setFoundId(rs.getInt("found_id"));
-            claim.setClaimantId(rs.getInt("claimant_id"));
-            claim.setProof(rs.getString("proof"));
-            claim.setStatus(rs.getString("status"));
-            claim.setClaimDate(rs.getTimestamp("claim_date"));
-
-            return claim;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return claims;
     }
 
 
-    return null;
+    public List<Claim> getAllClaims() {
+
+        List<Claim> claims = new ArrayList<>();
+
+        try (Connection con = DBConnection.getConnection()) {
+
+        	String sql =
+        	        "SELECT c.*, " +
+        	        "f.item_name, " +
+        	        "u.full_name, " +
+        	        "u.phone " +
+        	        "FROM claims c " +
+        	        "LEFT JOIN found_items f " +
+        	        "ON c.found_id = f.found_id " +
+        	        "LEFT JOIN users u " +
+        	        "ON c.claimant_id = u.user_id " +
+        	        "WHERE c.trust_score >= 75 " +
+        	        "ORDER BY c.claim_date DESC";
+        	
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Claim claim = new Claim();
+
+                claim.setClaimId(rs.getInt("claim_id"));
+                claim.setFoundId(rs.getInt("found_id"));
+                claim.setClaimantId(rs.getInt("claimant_id"));
+                claim.setProof(rs.getString("proof"));
+                claim.setStatus(rs.getString("status"));
+                claim.setClaimDate(rs.getTimestamp("claim_date"));
+
+                claim.setItemName(rs.getString("item_name"));
+                claim.setClaimantName(rs.getString("full_name"));
+                claim.setClaimantPhone(rs.getString("phone"));
+                claim.setTrustScore(rs.getInt("trust_score"));
+                
+                claims.add(claim);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return claims;
+    }
+
+
+    public List<Claim> searchClaims(String search) {
+
+        List<Claim> claims = new ArrayList<>();
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            String sql =
+                    "SELECT c.*, " +
+                    "f.item_name, " +
+                    "u.full_name, " +
+                    "u.phone " +
+                    "FROM claims c " +
+                    "LEFT JOIN found_items f " +
+                    "ON c.found_id = f.found_id " +
+                    "LEFT JOIN users u " +
+                    "ON c.claimant_id = u.user_id " +
+                    "WHERE f.item_name LIKE ? " +
+                    "OR u.full_name LIKE ? " +
+                    "OR c.proof LIKE ? " +
+                    "ORDER BY c.claim_date DESC";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, "%" + search + "%");
+            ps.setString(2, "%" + search + "%");
+            ps.setString(3, "%" + search + "%");
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Claim claim = new Claim();
+
+                claim.setClaimId(rs.getInt("claim_id"));
+                claim.setFoundId(rs.getInt("found_id"));
+                claim.setClaimantId(rs.getInt("claimant_id"));
+
+                claim.setItemName(rs.getString("item_name"));
+                claim.setClaimantName(rs.getString("full_name"));
+                claim.setClaimantPhone(rs.getString("phone"));
+
+                claim.setProof(rs.getString("proof"));
+                claim.setStatus(rs.getString("status"));
+                claim.setClaimDate(rs.getTimestamp("claim_date"));
+                claim.setTrustScore(rs.getInt("trust_score"));
+                
+                claims.add(claim);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return claims;
+    }
+
+
+    public boolean approveClaim(int claimId) {
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            String sql = "UPDATE CLAIMS SET STATUS = ? WHERE CLAIM_ID = ?";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, "APPROVED");
+            ps.setInt(2, claimId);
+
+            int rows = ps.executeUpdate();
+
+            return rows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+
+    public boolean rejectClaim(int claimId) {
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            String sql = "UPDATE CLAIMS SET STATUS = ? WHERE CLAIM_ID = ?";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, "REJECTED");
+            ps.setInt(2, claimId);
+
+            int rows = ps.executeUpdate();
+
+            return rows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+
+    public Claim getClaimById(int claimId) {
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            String sql = "SELECT * FROM claims WHERE claim_id = ?";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1, claimId);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                Claim claim = new Claim();
+
+                claim.setClaimId(rs.getInt("claim_id"));
+                claim.setFoundId(rs.getInt("found_id"));
+                claim.setClaimantId(rs.getInt("claimant_id"));
+                claim.setProof(rs.getString("proof"));
+                claim.setStatus(rs.getString("status"));
+                claim.setClaimDate(rs.getTimestamp("claim_date"));
+                claim.setTrustScore(rs.getInt("trust_score"));
+                
+                return claim;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    public int getPendingClaimsCount() {
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            String sql = "SELECT COUNT(*) FROM claims WHERE status = 'PENDING'";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("SQL ERROR:");
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+
+    public int getApprovedClaimsCount() {
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            String sql = "SELECT COUNT(*) FROM claims WHERE status = 'APPROVED'";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("SQL ERROR:");
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+
+    public int getRejectedClaimsCount() {
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            String sql = "SELECT COUNT(*) FROM claims WHERE status = 'REJECTED'";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("SQL ERROR:");
+            e.printStackTrace();
+        }
+
+        return 0;
+
+    }
 }
-
-
-
-public List<Claim> getAllClaims(){
-    List<Claim> claims = new ArrayList<>();
-
-	try(Connection con=DBConnection.getConnection())
-	{
-		String sql="SELECT\r\n"
-				+ "c.*,\r\n"
-				+ "f.item_name,\r\n"
-				+ "u.full_name,\r\n"
-				+ "u.phone\r\n"
-				+ "FROM claims c\r\n"
-				+ "JOIN found_items f\r\n"
-				+ "ON c.found_id = f.found_id\r\n"
-				+ "JOIN users u\r\n"
-				+ "ON c.claimant_id = u.user_id\r\n"
-				+ "ORDER BY c.claim_date DESC";
-		PreparedStatement ps=con.prepareStatement(sql);
-		
-		 ResultSet rs = ps.executeQuery();
-
-	        while (rs.next()) {
-
-	            Claim claim = new Claim();
-
-	            claim.setClaimId(rs.getInt("claim_id"));
-	            claim.setFoundId(rs.getInt("found_id"));
-	            claim.setClaimantId(rs.getInt("claimant_id"));
-	            claim.setProof(rs.getString("proof"));
-	            claim.setStatus(rs.getString("status"));
-	            claim.setClaimDate(rs.getTimestamp("claim_date"));
-	            claim.setItemName(rs.getString("item_name"));
-
-	            claim.setClaimantName(rs.getString("full_name"));
-
-	            claim.setClaimantPhone(rs.getString("phone"));
-	            claims.add(claim);
-	        }
-
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-
-	    return claims;
-	}
-public List<Claim> searchClaims(String search) {
-	List<Claim> claims = new ArrayList<>();
-	try(Connection con = DBConnection.getConnection()) {
-		String sql =
-				"SELECT c.*, f.item_name, u.full_name, u.phone " +
-				"FROM claims c " +
-				"JOIN found_items f ON c.found_id=f.found_id " +
-				"JOIN users u ON c.claimant_id=u.user_id " +
-				"WHERE f.item_name LIKE ? " +
-				"OR u.full_name LIKE ? " +
-				"OR c.proof LIKE ? " +
-				"ORDER BY c.claim_date DESC";
-		PreparedStatement ps = con.prepareStatement(sql);
-		ps.setString(1, "%" + search + "%");
-		ps.setString(2, "%" + search + "%");
-		ps.setString(3, "%" + search + "%");
-		ResultSet rs = ps.executeQuery();
-		while(rs.next()){
-
-		    Claim claim = new Claim();
-
-		    claim.setClaimId(rs.getInt("claim_id"));
-		    claim.setFoundId(rs.getInt("found_id"));
-		    claim.setClaimantId(rs.getInt("claimant_id"));
-
-		    claim.setItemName(rs.getString("item_name"));
-		    claim.setClaimantName(rs.getString("full_name"));
-		    claim.setClaimantPhone(rs.getString("phone"));
-
-		    claim.setProof(rs.getString("proof"));
-		    claim.setStatus(rs.getString("status"));
-		    claim.setClaimDate(rs.getTimestamp("claim_date"));
-
-		    claims.add(claim);
-		}
-	}catch (SQLException e) {
-        e.printStackTrace();
-    }
-
-		
-		return claims;
-	}
- public int getPendingClaimsCount()
- {
-	 try (Connection con = DBConnection.getConnection()) {
-
-         String sql = "SELECT COUNT(*) FROM claims where status='PENDING'";
-
-         PreparedStatement ps = con.prepareStatement(sql);
-
-         ResultSet rs = ps.executeQuery();
-
-         if (rs.next()) {
-
-             return rs.getInt(1);
-
-         }
-
-     } catch (SQLException e) {
-
-         System.out.println("SQL ERROR:");
-
-         e.printStackTrace();
-
-     }
-
-     return 0;
- }
- public int getApprovedClaimsCount()
- {
-	 try (Connection con = DBConnection.getConnection()) {
-
-         String sql = "SELECT COUNT(*) FROM claims where status='APPROVED'";
-
-         PreparedStatement ps = con.prepareStatement(sql);
-
-         ResultSet rs = ps.executeQuery();
-
-         if (rs.next()) {
-
-             return rs.getInt(1);
-
-         }
-
-     } catch (SQLException e) {
-
-         System.out.println("SQL ERROR:");
-
-         e.printStackTrace();
-
-     }
-
-     return 0;
- }
- public int getRejectedClaimsCount()
- {
-	 try (Connection con = DBConnection.getConnection()) {
-
-         String sql = "SELECT COUNT(*) FROM claims where status='REJECTED'";
-
-         PreparedStatement ps = con.prepareStatement(sql);
-
-         ResultSet rs = ps.executeQuery();
-
-         if (rs.next()) {
-
-             return rs.getInt(1);
-
-         }
-
-     } catch (SQLException e) {
-
-         System.out.println("SQL ERROR:");
-
-         e.printStackTrace();
-
-     }
-
-     return 0;
- }
-
-	 
- }
-
-
-	
 

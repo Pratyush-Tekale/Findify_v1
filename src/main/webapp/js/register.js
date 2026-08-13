@@ -1,3 +1,4 @@
+javascript
 const form = document.querySelector("form");
 
 const fullname = document.getElementById("fullname");
@@ -8,6 +9,7 @@ const confirmPassword = document.getElementById("confirmPassword");
 
 const togglePassword = document.getElementById("togglePassword");
 const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
+
 
 if (togglePassword) {
 
@@ -25,6 +27,7 @@ if (togglePassword) {
 
 }
 
+
 if (toggleConfirmPassword) {
 
     toggleConfirmPassword.addEventListener("click", () => {
@@ -41,6 +44,7 @@ if (toggleConfirmPassword) {
 
 }
 
+
 form.addEventListener("submit", function (e) {
 
     const name = fullname.value.trim();
@@ -49,9 +53,28 @@ form.addEventListener("submit", function (e) {
     const pass = password.value.trim();
     const confirm = confirmPassword.value.trim();
 
+
+    // Email validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+    // Indian phone number validation
     const phonePattern = /^[6-9]\d{9}$/;
 
+
+    // Name should contain only letters and spaces
+    const namePattern = /^[A-Za-z ]+$/;
+
+
+    // Password must contain:
+    // At least 6 characters
+    // At least one letter
+    // At least one number
+    // Only letters and numbers
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+
+
+    // Full name
     if (name === "") {
         e.preventDefault();
         alert("Please enter your full name.");
@@ -59,6 +82,15 @@ form.addEventListener("submit", function (e) {
         return;
     }
 
+    if (!namePattern.test(name)) {
+        e.preventDefault();
+        alert("Full name should contain only letters and spaces.");
+        fullname.focus();
+        return;
+    }
+
+
+    // Email
     if (!emailPattern.test(mail)) {
         e.preventDefault();
         alert("Please enter a valid email.");
@@ -66,6 +98,8 @@ form.addEventListener("submit", function (e) {
         return;
     }
 
+
+    // Phone
     if (!phonePattern.test(mobile)) {
         e.preventDefault();
         alert("Please enter a valid 10-digit phone number.");
@@ -73,13 +107,17 @@ form.addEventListener("submit", function (e) {
         return;
     }
 
-    if (pass.length < 6) {
+
+    // Password
+    if (!passwordPattern.test(pass)) {
         e.preventDefault();
-        alert("Password must be at least 6 characters.");
+        alert("Password must be at least 6 characters and contain both letters and numbers.");
         password.focus();
         return;
     }
 
+
+    // Confirm password
     if (pass !== confirm) {
         e.preventDefault();
         alert("Passwords do not match.");
@@ -87,6 +125,9 @@ form.addEventListener("submit", function (e) {
         return;
     }
 
+
     // If everything is valid,
     // the form submits automatically to RegisterServlet.
+
 });
+

@@ -12,6 +12,7 @@ import com.findify.dao.LostItemDAO;
 import com.findify.model.LostItem;
 
 
+@SuppressWarnings("serial")
 @WebServlet("/BrowseLostItemsServlet")
 public class BrowseLostItemsServlet extends HttpServlet {
 

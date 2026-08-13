@@ -19,6 +19,7 @@ import com.findify.dao.LostItemDAO;
 import com.findify.model.LostItem;
 import java.sql.Date;
 
+@SuppressWarnings("serial")
 @WebServlet("/ReportServlet")
 @MultipartConfig
 public class ReportServlet extends HttpServlet {
