@@ -1,3 +1,5 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="com.findify.model.User" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +10,6 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="css/login.css">
 
 </head>
@@ -20,8 +21,8 @@
         FINDIFY
     </div>
 
-    <a href="index.html" class="back-btn">
-        ← Back to Home
+    <a href="index.jsp" class="back-btn">
+    <- Back to Home
     </a>
 
 </header>
@@ -69,18 +70,20 @@ if (error != null) {
 
 <div class="input-group">
 
-<label>Password<span style="color:#c0392b;">*</span></label>
+    <label>Password<span style="color:#c0392b;">*</span></label>
 
-<div class="password-box">
-<input
-    type="password"
-    id="password"
-    name="password"
-    placeholder="Enter your password"
-    required>
-<span class="toggle-password" id="togglePassword">👁</span>
+    <div class="password-box">
 
-</div>
+        <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            required>
+
+        <span class="toggle-password" id="togglePassword">&#x1F441;</span>
+    </div>
+
 </div>
 
 <button type="submit" class="login-btn">
@@ -91,7 +94,7 @@ Login
 
 <div class="links">
 
-<a href="#">Forgot Password?</a>
+<a href="forgotpassword.jsp">Forgot Password?</a>
 
 </div>
 

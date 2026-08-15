@@ -41,14 +41,14 @@
 	<div class="container">
 	
 	
-	<a href="index.html" class="logo">
+	<a href="index.jsp" class="logo">
 	FINDIFY
 	</a>
 	
 	
 	<nav>
 	
-	<a href="index.html">
+	<a href="index.jsp">
 	Home
 	</a>
 	

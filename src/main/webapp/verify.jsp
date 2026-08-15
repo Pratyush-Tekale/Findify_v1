@@ -25,7 +25,7 @@ FINDIFY
 
 <nav>
 
-<a href="index.html">Home</a>
+<a href="index.jsp">Home</a>
 <a href="contact.html">Contact Us</a>
 
 </nav>
@@ -102,7 +102,7 @@ String foundId = request.getParameter("foundId");
 
 <a href="index.html">
 
-‚Üê Back to Home
+<-Üê Back to Home
 
 </a>
 

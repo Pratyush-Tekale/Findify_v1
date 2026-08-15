@@ -96,4 +96,50 @@ public class UserDAO {
 
         return 0;
     }
+    
+    public boolean emailExists(String email) {
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            String sql = "SELECT user_id FROM users WHERE email = ?";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, email);
+
+            ResultSet rs = ps.executeQuery();
+
+            return rs.next();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+
+        return false;
     }
+    
+    public boolean updatePassword(String email, String password) {
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            String sql = "UPDATE users SET password=? WHERE email=?";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, password);
+            ps.setString(2, email);
+
+            int rows = ps.executeUpdate();
+
+            return rows > 0;
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+        }
+
+        return false;
+    }
+}

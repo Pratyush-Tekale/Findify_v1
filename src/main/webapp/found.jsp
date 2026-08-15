@@ -36,7 +36,7 @@ FINDIFY
 
 <nav>
 
-<a href="index.html ">Home</a>
+<a href="index.jsp">Home</a>
 
 <a href="contact.html">Contact us</a>
 
