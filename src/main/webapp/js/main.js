@@ -49,3 +49,25 @@ if(copyright){
     copyright.innerHTML=`© ${year} FINDIFY — COLLEGE PROJECT`;
 
 }
+/* ===========================
+   LOGIN REQUIRED LINKS
+=========================== */
+
+const protectedLinks = document.querySelectorAll(".login-required");
+
+protectedLinks.forEach(function(link) {
+
+    link.addEventListener("click", function(e) {
+
+        if (!isLoggedIn) {
+
+            e.preventDefault();
+
+            alert("Please log in first.");
+
+            window.location.href = "login.jsp";
+        }
+
+    });
+
+});

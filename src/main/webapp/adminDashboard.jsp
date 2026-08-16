@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
@@ -35,6 +34,7 @@ if (!"ADMIN".equals(loggedInUser.getRole())) {
         FINDIFY <span class="admin-badge">Admin</span>
       </a>
       <div class="links">
+        <a href="index.jsp">Home</a>
         <a href="#pendingClaims">Manage Claims</a>
         <a href="ViewFoundServlet">Found Items</a>
         <a href="BrowseLostItemsServlet">Lost Items</a>
@@ -142,37 +142,20 @@ if (!"ADMIN".equals(loggedInUser.getRole())) {
                     <td>${claim.itemName}</td>
                     <td>${claim.claimantName}</td>
                     <td>${claim.claimantPhone}</td>
-                 	<td>
-					    <div class="trust-bar">
-					        <div class="track">
-					
-					            <c:choose>
-					
-					                <c:when test="${claim.trustScore >= 75}">
-					                    <div class="fill"
-					                         style="width:${claim.trustScore}%; background-color:#2e8b57 !important;">
-					                    </div>
-					                </c:when>
-					
-					                <c:when test="${claim.trustScore >= 40}">
-					                    <div class="fill"
-					                         style="width:${claim.trustScore}%; background-color:#d99a2b !important;">
-					                    </div>
-					                </c:when>
-					
-					                <c:otherwise>
-					                    <div class="fill"
-					                         style="width:${claim.trustScore}%; background-color:#c0392b !important;">
-					                    </div>
-					                </c:otherwise>
-					
-					            </c:choose>
-					
-					        </div>
-					
-					        <span>${claim.trustScore}</span>
-					    </div>
-					</td>
+                    <td>
+                      <div class="trust-bar">
+                        <div class="track">
+                          <div class="fill
+                            <c:choose>
+                              <c:when test="${claim.trustScore >= 75}">high</c:when>
+                              <c:when test="${claim.trustScore >= 40}">mid</c:when>
+                              <c:otherwise>low</c:otherwise>
+                            </c:choose>
+                          " style="width:${claim.trustScore}%;"></div>
+                        </div>
+                        <span>${claim.trustScore}</span>
+                      </div>
+                    </td>
                     <td><fmt:formatDate value="${claim.claimDate}" pattern="dd MMM yyyy HH:mm"/></td>
                     <td>
                       <c:choose>

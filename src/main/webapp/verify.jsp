@@ -100,10 +100,8 @@ String foundId = request.getParameter("foundId");
 
 <div class="back-link">
 
-<a href="index.html">
-
-<-† Back to Home
-
+<a href="index.jsp">
+<- Back to Home
 </a>
 
 </div>

@@ -3,6 +3,7 @@ package com.findify.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.findify.model.FoundItem;
@@ -180,4 +181,33 @@ public class FoundItemDAO {
 
         return list;
     }
+    
+    public int getTotalFoundItems() {
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            String sql = "SELECT COUNT(*) FROM found_items";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                return rs.getInt(1);
+
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println("SQL ERROR:");
+
+            e.printStackTrace();
+
+        }
+
+        return 0;
+    }
+    
+    
 }

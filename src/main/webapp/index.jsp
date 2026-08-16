@@ -117,15 +117,15 @@ if (loggedInUser != null) {
 
     <div class="user-dropdown" id="userDropdown">
 
-        <a href="#">
+        <a href="profile.jsp">
             Your Profile
         </a>
 
-        <a href="#">
+        <a href="UserDashboardServlet">
             My Dashboard
         </a>
 
-        <a href="#">
+        <a href="settings.jsp">
             Settings
         </a>
 
@@ -179,21 +179,21 @@ if (loggedInUser != null) {
       <p class="lead">Findify keeps a running log of everything found around campus &mdash; books, IDs, earbuds, bottles, etc &mdash; so you can search it, claim it, and get back to class. Report what you lost in under a minute.</p>
       <div class="hero-ctas">
 
-    <a href="report.html" class="btn btn-primary">
-        Report Lost Item
-    </a>
+    <a href="javascript:checkLogin('report.html')" class="btn btn-primary">
+    Report Lost Item
+	</a>
 
-    <a href="BrowseLostItemsServlet" class="btn btn-secondary">
-        Browse Lost Items
-    </a>
+    <a href="javascript:checkLogin('BrowseLostItemsServlet')" class="btn btn-secondary">
+    Browse Lost Items
+	</a>
 
-    <a href="reportfound.html" class="btn btn-primary">
-        Report Found Item
-    </a>
+    <a href="javascript:checkLogin('reportfound.html')" class="btn btn-primary">
+    Report Found Item
+	</a>
 
-    <a href="ViewFoundServlet" class="btn btn-secondary">
-        Browse Found Items
-    </a>
+    <a href="javascript:checkLogin('ViewFoundServlet')" class="btn btn-secondary">
+    Browse Found Items
+	</a>
 
 </div>
     </div>
@@ -352,7 +352,9 @@ REPORT
 Lost something on campus? Submit a report so others can help find it.
 </p>
 
-<a href="report.html" class="ticket-cta">Open -></a>
+<a href="javascript:checkLogin('report.html')" class="ticket-cta">
+    Open ->
+</a>
 
 </div>
 
@@ -371,7 +373,9 @@ BROWSE
 View recently reported lost items across the campus.
 </p>
 
-<a href="BrowseLostItemsServlet" class="ticket-cta">Browse -></a>
+<a href="javascript:checkLogin('BrowseLostItemsServlet')" class="ticket-cta">
+    Browse ->
+</a>
 
 </div>
 
@@ -390,7 +394,9 @@ REPORT
 Found an item? Report it and help reunite it with its owner.
 </p>
 
-<a href="reportfound.html" class="ticket-cta">Open -></a>
+<a href="javascript:checkLogin('reportfound.html')" class="ticket-cta">
+    Open ->
+</a>
 
 </div>  
 
@@ -410,7 +416,9 @@ BROWSE
 See all found items waiting to be claimed by their owners.
 </p>
 
-<a href="ViewFoundServlet" class="ticket-cta">Browse -></a>
+<a href="javascript:checkLogin('ViewFoundServlet')" class="ticket-cta">
+    Browse ->
+</a>
 
 </div>
 
@@ -450,7 +458,7 @@ See all found items waiting to be claimed by their owners.
   <div class="wrap">
     <h2>Lost something today?</h2>
     <p>Filing a report takes less time than walking back to check.</p>
-    <a href="report.html" class="btn btn-primary">Report a Lost Item</a>
+    <a href="javascript:checkLogin('report.html')" class="btn btn-primary">Report a Lost Item</a>
   </div>
 </section>
 <footer>
@@ -486,13 +494,29 @@ See all found items waiting to be claimed by their owners.
       </div>
     </div>
     <div class="footer-bottom">
-      <span id="copyright">Â© 2026 FINDIFY â COLLEGE PROJECT</span>
+      <span id="copyright">© 2026 FINDIFY â COLLEGE PROJECT</span>
       <span> ISSUED CAMPUS-WIDE</span>
     </div>
   </div>
 </footer>
 <script src="js/main.js"></script>
 
+<script>
+function checkLogin(page) {
+
+    <% if (loggedInUser == null) { %>
+
+        alert("Please log in first.");
+        window.location.href = "login.jsp";
+
+    <% } else { %>
+
+        window.location.href = page;
+
+    <% } %>
+
+}
+</script>
 <script>
 function toggleUserMenu() {
 
@@ -505,7 +529,7 @@ function toggleUserMenu() {
     }
 
 }
-
 </script>
+
 </body>
 </html>
