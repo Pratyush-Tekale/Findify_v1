@@ -2,6 +2,8 @@ package com.findify.servlet;
 
 import com.findify.dao.UserDAO;
 import com.findify.dao.ClaimDAO;
+import com.findify.dao.FoundItemDAO;
+import com.findify.dao.LostItemDAO;
 import com.findify.model.Claim;
 
 import java.io.IOException;
@@ -22,6 +24,9 @@ public class AdminDashboardServlet extends HttpServlet {
             throws ServletException, IOException {
 
         ClaimDAO dao = new ClaimDAO();
+        LostItemDAO lost=new LostItemDAO();
+        FoundItemDAO found=new FoundItemDAO();
+
         String status = request.getParameter("status");
         String search = request.getParameter("search");
 
@@ -50,8 +55,8 @@ public class AdminDashboardServlet extends HttpServlet {
         request.setAttribute("totalUsers", userDao.getTotalUsers());
 
         // ⚠️ Wire these up once LostItemDAO/FoundItemDAO methods exist
-        request.setAttribute("totalLostItems", 0);
-        request.setAttribute("totalFoundItems", 0);
+        request.setAttribute("totalLostItems", lost.getTotalLostItems());
+        request.setAttribute("totalFoundItems",found.getTotalFoundItems() );
 
         // Recent activity feed — last 6 claims regardless of filter/trust score
         List<Claim> recentActivity = dao.getRecentClaims(6);

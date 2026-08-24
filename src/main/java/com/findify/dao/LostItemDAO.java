@@ -222,5 +222,37 @@ public class LostItemDAO {
         return item;
 
     }
+    
+    
+    public int getTotalLostItems() {
+
+        try (Connection con = DBConnection.getConnection()) {
+
+            String sql = "SELECT COUNT(*) FROM lost_items";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                return rs.getInt(1);
+
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println("SQL ERROR:");
+
+            e.printStackTrace();
+
+        }
+
+        return 0;
+    }
+    
+    
+    
+    
 
 }

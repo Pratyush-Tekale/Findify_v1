@@ -111,28 +111,40 @@ public class ClaimDAO {
     }
 
     public List<Claim> getAllClaims() {
+
         List<Claim> claims = new ArrayList<>();
+
         try (Connection con = DBConnection.getConnection()) {
-        	String sql =
-        	        "SELECT c.*, " +
-        	        "f.item_name, " +
-        	        "u.full_name, " +
-        	        "u.phone " +
-        	        "FROM claims c " +
-        	        "LEFT JOIN found_items f " +
-        	        "ON c.found_id = f.found_id " +
-        	        "LEFT JOIN users u " +
-        	        "ON c.claimant_id = u.user_id " +
-        	        "WHERE c.trust_score >= 75 " +
-        	        "ORDER BY c.claim_date DESC";
+
+            String sql =
+                    "SELECT c.*, " +
+                    "f.item_name, " +
+                    "f.description, " +
+                    "f.location_found, " +
+                    "f.date_found, " +
+                    "f.image, " +
+                    "u.full_name, " +
+                    "u.phone " +
+                    "FROM claims c " +
+                    "LEFT JOIN found_items f " +
+                    "ON c.found_id = f.found_id " +
+                    "LEFT JOIN users u " +
+                    "ON c.claimant_id = u.user_id " +
+                    "WHERE c.trust_score >= 75 " +
+                    "ORDER BY c.claim_date DESC";
 
             PreparedStatement ps = con.prepareStatement(sql);
+
             ResultSet rs = ps.executeQuery();
+
             while (rs.next()) {
+
                 Claim claim = new Claim();
+
                 claim.setClaimId(rs.getInt("claim_id"));
                 claim.setFoundId(rs.getInt("found_id"));
                 claim.setClaimantId(rs.getInt("claimant_id"));
+
                 claim.setProof(rs.getString("proof"));
                 claim.setStatus(rs.getString("status"));
                 claim.setClaimDate(rs.getTimestamp("claim_date"));
@@ -142,19 +154,21 @@ public class ClaimDAO {
                 claim.setLocationFound(rs.getString("location_found"));
                 claim.setDateFound(rs.getDate("date_found"));
                 claim.setItemImage(rs.getString("image"));
+
                 claim.setClaimantName(rs.getString("full_name"));
                 claim.setClaimantPhone(rs.getString("phone"));
+
                 claim.setTrustScore(rs.getInt("trust_score"));
 
                 claims.add(claim);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return claims;
     }
-
     /**
      * Most recent claims regardless of status/trust score — used for the
      * admin dashboard "Recent Activity" feed. Unlike getAllClaims(), this
@@ -214,24 +228,25 @@ public class ClaimDAO {
     public List<Claim> searchClaims(String search) {
         List<Claim> claims = new ArrayList<>();
         try (Connection con = DBConnection.getConnection()) {
-            String sql =
-                    "SELECT c.*, " +
-                    "f.item_name, " +
-                    "f.description, " +
-                    "f.location_found, " +
-                    "f.date_found, " +
-                    "f.image, " +
-                    "u.full_name, " +
-                    "u.phone " +
-                    "FROM claims c " +
-                    "LEFT JOIN found_items f " +
-                    "ON c.found_id = f.found_id " +
-                    "LEFT JOIN users u " +
-                    "ON c.claimant_id = u.user_id " +
-                    "WHERE f.item_name LIKE ? " +
-                    "OR u.full_name LIKE ? " +
-                    "OR c.proof LIKE ? " +
-                    "ORDER BY c.claim_date DESC";
+        	String sql =
+        	        "SELECT c.*, " +
+        	        "f.item_name, " +
+        	        "f.description, " +
+        	        "f.location_found, " +
+        	        "f.date_found, " +
+        	        "f.image, " +
+        	        "u.full_name, " +
+        	        "u.phone " +
+        	        "FROM claims c " +
+        	        "LEFT JOIN found_items f " +
+        	        "ON c.found_id = f.found_id " +
+        	        "LEFT JOIN users u " +
+        	        "ON c.claimant_id = u.user_id " +
+        	        "WHERE (f.item_name LIKE ? " +
+        	        "OR u.full_name LIKE ? " +
+        	        "OR c.proof LIKE ?) " +
+        	        "AND c.trust_score >= 75 " +
+        	        "ORDER BY c.claim_date DESC";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, "%" + search + "%");
             ps.setString(2, "%" + search + "%");

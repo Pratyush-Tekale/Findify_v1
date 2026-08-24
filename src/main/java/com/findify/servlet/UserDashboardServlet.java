@@ -23,7 +23,6 @@ public class UserDashboardServlet extends HttpServlet {
                           HttpServletResponse response)
             throws ServletException, IOException {
 
-        System.out.println("USER DASHBOARD SERVLET CALLED");
 
         // Get existing session
         HttpSession session = request.getSession(false);
@@ -55,8 +54,7 @@ public class UserDashboardServlet extends HttpServlet {
             return;
         }
 
-        System.out.println("Dashboard user: " + user.getFullName());
-        System.out.println("Dashboard user ID: " + user.getUserId());
+       
 
         // Create Dashboard DAO
         DashboardDAO dao = new DashboardDAO();
@@ -68,8 +66,6 @@ public class UserDashboardServlet extends HttpServlet {
         // Send data to JSP
         request.setAttribute("user", user);
         request.setAttribute("dashboard", dashboard);
-
-        System.out.println("Opening userDashboard.jsp");
 
         // Open dashboard
         request.getRequestDispatcher("/userDashboard.jsp")

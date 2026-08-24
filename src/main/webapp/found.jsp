@@ -1,173 +1,191 @@
-<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
 <%@ page import="com.findify.model.FoundItem" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Findify | Found Items</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <title>Findify | Found Items</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&family=JetBrains+Mono:wght@400;600&family=Big+Shoulders+Condensed:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
 
-<link rel="stylesheet" href="css/found.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&family=JetBrains+Mono:wght@400;600&family=Big+Shoulders+Condensed:wght@700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="css/found.css">
 
 </head>
 
+
 <body>
+
 
 <!-- ================= HEADER ================= -->
 
 <header>
 
-<div class="container">
+    <div class="container">
 
-<div class="logo">
- 
-FINDIFY
+        <div class="logo">
+            FINDIFY
+        </div>
 
-</div>
+        <nav>
 
-<nav>
+            <a href="index.jsp">
+                Home
+            </a>
 
-<a href="index.html ">Home</a>
+            <a href="contact.html">
+                Contact us
+            </a>
 
-<a href="contact.html">Contact us</a>
+        </nav>
 
-
-</nav>
-
-</div>
+    </div>
 
 </header>
+
 
 <!-- ================= HERO ================= -->
 
 <section class="hero">
 
-<div class="container">
+    <div class="container">
 
-<p class="tag">
+        <p class="tag">
+            Campus Lost &amp; Found
+        </p>
 
-Campus Lost & Found 
+        <h1>
+            Recently Found Items
+        </h1>
 
-</p>
+        <p class="hero-text">
+            Search for your belongings and claim them after verification.
+        </p>
 
-<h1>
-
-Recently Found Items
-
-</h1>
-
-<p class="hero-text">
-
-Search for your belongings and claim them after verification.
-
-</p>
-
-</div>
+    </div>
 
 </section>
+
 
 <!-- ================= SEARCH ================= -->
 
 <section class="search-section">
 
-<div class="container">
+    <div class="container">
 
-<div class="search-area">
+        <div class="search-area">
 
-<input
-type="text"
-id="searchInput"
-placeholder="Search found item...">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search found item..."
+                autocomplete="off">
 
-<select id="categoryFilter">
 
-<option value="all">
-All Categories
-</option>
+            <select id="categoryFilter">
 
-<option value="Electronics">
-Electronics
-</option>
+                <option value="all">
+                    All Categories
+                </option>
 
-<option value="Books">
-Books
-</option>
+                <option value="Electronics">
+                    Electronics
+                </option>
 
-<option value="Wallet">
-Wallet
-</option>
+                <option value="Books">
+                    Books
+                </option>
 
-<option value="ID Card">
-ID Card
-</option>
+                <option value="Wallet">
+                    Wallet
+                </option>
 
-<option value="Keys">
-Keys
-</option>
+                <option value="ID Card">
+                    ID Card
+                </option>
 
-<option value="Bag">
-Bag
-</option>
+                <option value="Keys">
+                    Keys
+                </option>
 
-<option value="Clothing">
-Clothing
-</option>
+                <option value="Bag">
+                    Bag
+                </option>
 
-<option value="Mobile">
-Mobile
-</option>
+                <option value="Clothing">
+                    Clothing
+                </option>
 
-<option value="Jewellery">
-Jewellery
-</option>
+                <option value="Mobile">
+                    Mobile
+                </option>
 
-<option value="Accessories">
-Accessories
-</option>
+                <option value="Jewellery">
+                    Jewellery
+                </option>
 
-<option value="Others">
-Others
-</option>
+                <option value="Accessories">
+                    Accessories
+                </option>
 
-</select>
+                <option value="Others">
+                    Others
+                </option>
 
-</div>
+            </select>
 
-</div>
+        </div>
+
+    </div>
 
 </section>
+
 
 <!-- ================= FOUND ITEMS ================= -->
 
 <section class="items">
 
-<div class="container">
+    <div class="container">
 
-<div class="item-grid">
+        <div class="item-grid">
 
-<%
-ArrayList<FoundItem> foundItems =
-(ArrayList<FoundItem>) request.getAttribute("foundItems");
+            <%
 
-if(foundItems != null && !foundItems.isEmpty()){
+                List<FoundItem> foundItems =
+                    (List<FoundItem>) request.getAttribute("foundItems");
 
-    for(FoundItem item : foundItems){
-%>
+                if (foundItems != null && !foundItems.isEmpty()) {
 
-<div class="item-card" data-category="<%= item.getCategoryName() %>">
+                    for (FoundItem item : foundItems) {
+
+            %>
+
+
+            <!-- ================= ITEM CARD ================= -->
+
+           <div class="item-card"
+     data-category="<%= item.getCategoryName() != null ? item.getCategoryName() : "" %>"
+     data-name="<%= item.getItemName() != null ? item.getItemName() : "" %>"
+     data-location="<%= item.getLocationFound() != null ? item.getLocationFound() : "" %>"
+     data-id="<%= item.getFoundId() %>">
 
     <div class="icon">
-    <i class="fa-solid fa-tag"></i>
-</div>
+        <i class="fa-solid fa-tag"></i>
+    </div>
 
     <div class="content">
 
@@ -176,72 +194,93 @@ if(foundItems != null && !foundItems.isEmpty()){
         </span>
 
         <h2 class="item-name">
-            <%= item.getItemName() %>
+            <%= item.getItemName() != null
+                    ? item.getItemName()
+                    : "Unknown Item" %>
         </h2>
 
         <div class="status">
-            <%= item.getStatus() %>
+            <%= item.getStatus() != null
+                    ? item.getStatus()
+                    : "Available" %>
         </div>
 
         <p>
-            Location : <%= item.getLocationFound() %>
+            Location :
+            <%= item.getLocationFound() != null
+                    ? item.getLocationFound()
+                    : "Unknown" %>
         </p>
 
         <p>
-            Date : <%= item.getDateFound() %>
+            Date :
+            <%= item.getDateFound() != null
+                    ? item.getDateFound()
+                    : "Unknown" %>
         </p>
 
-       <a href="verify.jsp?foundId=<%= item.getFoundId() %>" class="claim-btn">
-    Claim Item
-</a>
+        <a href="verify.jsp?foundId=<%= item.getFoundId() %>"
+           class="claim-btn">
+            Claim Item
+        </a>
 
     </div>
 
 </div>
 
-<%
-    }
-}
-else{
-%>
+             
 
-<h2 style="text-align:center;width:100%;padding:60px;color:#555;">
-No Found Items Available
-</h2>
+            <%
 
-<%
-}
-%>
+                    }
 
-</div>
+                } else {
+
+            %>
 
 
-</div>
+            <!-- ================= NO ITEMS ================= -->
 
-<!-- CARD -->
+            <h2
+                style="text-align:center;
+                       width:100%;
+                       padding:60px;
+                       color:#555;">
 
-<div class="item-card" data-category="Watch">
+                No Found Items Available
+
+            </h2>
 
 
+            <%
 
-</div>
+                }
+
+            %>
+
+        </div>
+
+
 
 </section>
+
 
 <!-- ================= FOOTER ================= -->
 
 <footer>
 
-<div class="container">
+    <div class="container">
 
-<p>
-&copy; 2026 FINDIFY | Campus Lost & Found
+        <p>
 
-</p>
+            &copy; 2026 FINDIFY | Campus Lost &amp; Found
 
-</div>
+        </p>
+
+    </div>
 
 </footer>
+
 
 <script src="js/found.js"></script>
 

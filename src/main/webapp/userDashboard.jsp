@@ -5,7 +5,7 @@
 <%@ page import="com.findify.model.Dashboard"%>
 
 <%
-if(session.getAttribute("user")==null){
+if(session.getAttribute("loggedInUser")==null){
 
     response.sendRedirect("login.jsp");
     return;
@@ -23,7 +23,7 @@ Dashboard dashboard=(Dashboard)request.getAttribute("dashboard");
 
 <title>Findify | User Dashboard</title>
 
-<link rel="stylesheet" href="css/userDashboard.css">
+<link rel="stylesheet" href="<%= request.getContextPath() %>/css/userdashboard.css">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
@@ -43,17 +43,13 @@ Dashboard dashboard=(Dashboard)request.getAttribute("dashboard");
 
 <ul>
 
-<li><a href="UserDashboardServlet">🏠 Dashboard</a></li>
-
-<li><a href="#">👤 My Profile</a></li>
-
-<li><a href="#">📦 Report Lost Item</a></li>
-
-<li><a href="#">🎁 Report Found Item</a></li>
+<li><a href="profile.jsp">👤 My Profile</a></li>
 
 <li><a href="#">📋 My Claims</a></li>
 
-<li><a href="LogoutServlet">🚪 Logout</a></li>
+<li><a href="index.jsp">Homes</a></li>
+
+<li><a href="LogoutServlet">Logout</a></li>
 
 </ul>
 
@@ -79,7 +75,7 @@ Manage your Findify account from here.
 
 <div class="profile-card">
 
-<h2>My Profile</h2>
+<h2>Your Info</h2>
 
 <table>
 
@@ -125,7 +121,7 @@ Manage your Findify account from here.
 
 <div class="card">
 
-<h3>Lost Items</h3>
+<h3>Lost Items You Reported</h3>
 
 <h1><%= dashboard.getLostItems() %></h1>
 
@@ -133,7 +129,7 @@ Manage your Findify account from here.
 
 <div class="card">
 
-<h3>Found Items</h3>
+<h3>Found Items You Reported</h3>
 
 <h1><%= dashboard.getFoundItems() %></h1>
 
@@ -161,31 +157,117 @@ Manage your Findify account from here.
 
 <div class="actions">
 
-<h2>Quick Actions</h2>
+    <h2>Quick Actions</h2>
+    
+    
+	<!-- MY CLAIMS -->
+    <button type="button"
+            onclick="location.href='viewmyitems.html'">
 
-<button onclick="location.href='lostItem.jsp'">
+        <span class="action-badge">Your Reported Items</span>
 
-Report Lost Item
+        <span class="action-title">
+            <span class="action-icon">📋</span>
+            View My Reported Items
+        </span>
 
-</button>
+        <span class="action-description">
+            Check items you have Reported	
+        </span>
 
-<button onclick="location.href='foundItem.jsp'">
+        <span class="action-open">
+            Open →
+        </span>
 
-Report Found Item
+    </button>
+    
+    
+    <!-- REPORT LOST -->
+    <button type="button"
+            onclick="location.href='report.html'">
 
-</button>
+        <span class="action-badge">REPORT</span>
 
-<button onclick="location.href='myClaims.jsp'">
+        <span class="action-title">
+            <span class="action-icon">📢</span>
+            Report Lost Item
+        </span>
 
-View My Claims
+        <span class="action-description">
+            Lost something on campus? Submit a report so others can help find it.
+        </span>
 
-</button>
+        <span class="action-open">
+            Open →
+        </span>
 
-<button onclick="location.href='profile.jsp'">
+    </button>
 
-Edit Profile
 
-</button>
+    <!-- REPORT FOUND -->
+    <button type="button"
+            onclick="location.href='reportfound.html'">
+
+        <span class="action-badge">REPORT</span>
+
+        <span class="action-title">
+            <span class="action-icon">📦</span>
+            Report Found Item
+        </span>
+
+        <span class="action-description">
+            Found an item? Report it and help reunite it with its owner.
+        </span>
+
+        <span class="action-open">
+            Open →
+        </span>
+
+    </button>
+
+
+    <!-- BROWSE LOST -->
+    <button type="button"
+            onclick="location.href='BrowseLostItemsServlet'">
+
+        <span class="action-badge">BROWSE</span>
+
+        <span class="action-title">
+            <span class="action-icon">🔎</span>
+            Browse Lost Items
+        </span>
+
+        <span class="action-description">
+            View recently reported lost items across the campus.
+        </span>
+
+        <span class="action-open">
+            Browse →
+        </span>
+
+    </button>
+
+
+    <!-- BROWSE FOUND -->
+    <button type="button"
+            onclick="location.href='ViewFoundServlet'">
+
+        <span class="action-badge">BROWSE</span>
+
+        <span class="action-title">
+            <span class="action-icon">✅</span>
+            Browse Found Items
+        </span>
+
+        <span class="action-description">
+            See all found items waiting to be claimed by their owners.
+        </span>
+
+        <span class="action-open">
+            Browse →
+        </span>
+
+    </button>
 
 </div>
 

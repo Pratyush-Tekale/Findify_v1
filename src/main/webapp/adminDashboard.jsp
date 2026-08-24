@@ -34,11 +34,10 @@ if (!"ADMIN".equals(loggedInUser.getRole())) {
         FINDIFY <span class="admin-badge">Admin</span>
       </a>
       <div class="links">
-        <a href="index.html">Home</a>
-        <a href="AdminDashboardServlet" class="active">Dashboard</a>
+        <a href="index.jsp">Home</a>
         <a href="#pendingClaims">Manage Claims</a>
-        <a href="found.html">Found Items</a>
-        <a href="lost.html">Lost Items</a>
+        <a href="ViewFoundServlet">Found Items</a>
+        <a href="BrowseLostItemsServlet">Lost Items</a>
       </div>
       <a href="LogoutServlet" class="nav-cta ghost">Logout</a>
     </nav>
@@ -143,20 +142,18 @@ if (!"ADMIN".equals(loggedInUser.getRole())) {
                     <td>${claim.itemName}</td>
                     <td>${claim.claimantName}</td>
                     <td>${claim.claimantPhone}</td>
-                    <td>
-                      <div class="trust-bar">
-                        <div class="track">
-                          <div class="fill
-                            <c:choose>
-                              <c:when test="${claim.trustScore >= 75}">high</c:when>
-                              <c:when test="${claim.trustScore >= 40}">mid</c:when>
-                              <c:otherwise>low</c:otherwise>
-                            </c:choose>
-                          " style="width:${claim.trustScore}%;"></div>
-                        </div>
-                        <span>${claim.trustScore}</span>
-                      </div>
-                    </td>
+                     <td>
+    <div class="trust-bar">
+        <div class="track">
+            <div
+                class="fill ${claim.trustScore >= 75 ? 'high' : claim.trustScore >= 40 ? 'mid' : 'low'}"
+                style="width:${claim.trustScore}%;">
+            </div>
+        </div>
+
+        <span>${claim.trustScore}</span>
+    </div>
+</td>
                     <td><fmt:formatDate value="${claim.claimDate}" pattern="dd MMM yyyy HH:mm"/></td>
                     <td>
                       <c:choose>
