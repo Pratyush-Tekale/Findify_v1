@@ -2,14 +2,17 @@ package com.findify.servlet;
 
 
 
-import com.findify.dao.FoundItemDAO;
-import com.findify.model.FoundItem;
-import com.findify.util.TrustScoreUtil;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.findify.dao.ClaimDAO;
+import com.findify.dao.VerificationQuestionDAO;
 import com.findify.model.Claim;
+import com.findify.model.ClaimAnswer;
 import com.findify.model.User;
+import com.findify.model.VerificationQuestion;
+import com.findify.util.AnswerMatcher;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -33,7 +36,6 @@ public class ClaimServlet extends HttpServlet {
             throws ServletException, IOException {
 
         int foundId = Integer.parseInt(request.getParameter("foundId"));
-        String proof = request.getParameter("proof");
 
         HttpSession session = request.getSession(false);
 
@@ -49,32 +51,48 @@ public class ClaimServlet extends HttpServlet {
             return;
         }
 
-        
-        FoundItemDAO foundDao = new FoundItemDAO();
+        // Load the private questions (with their correct answers) for this
+        // found item — never sent back to the browser, used only here to
+        // score what the claimant just submitted.
+        VerificationQuestionDAO qDao = new VerificationQuestionDAO();
+        List<VerificationQuestion> questions = qDao.getQuestionsByFoundId(foundId);
 
-        FoundItem foundItem = foundDao.getFoundItemById(foundId);
-
-        if (foundItem == null) {
-            response.sendRedirect("verify.jsp?foundId=" + foundId + "&error=itemnotfound");
+        if (questions.isEmpty()) {
+            response.sendRedirect("verify.jsp?foundId=" + foundId + "&error=noquestions");
             return;
         }
 
-        String description = foundItem.getDescription();
+        int matched = 0;
+        List<ClaimAnswer> submittedAnswers = new ArrayList<>();
 
-        int trustScore =
-                TrustScoreUtil.calculateTrustScore(description, proof);
-        
+        for (VerificationQuestion q : questions) {
+
+            String submitted = request.getParameter("answer_" + q.getQuestionId());
+
+            boolean isCorrect = AnswerMatcher.isMatch(q.getCorrectAnswer(), submitted);
+
+            if (isCorrect) {
+                matched++;
+            }
+
+            ClaimAnswer answer = new ClaimAnswer();
+            answer.setQuestionId(q.getQuestionId());
+            answer.setSubmittedAnswer(submitted);
+            answer.setCorrect(isCorrect);
+            submittedAnswers.add(answer);
+        }
+
         Claim claim = new Claim();
 
         claim.setFoundId(foundId);
         claim.setClaimantId(loggedInUser.getUserId());
-        claim.setProof(proof);
         claim.setStatus("PENDING");
-        claim.setTrustScore(trustScore);
-        
+        claim.setMatchedAnswers(matched);
+        claim.setTotalQuestions(questions.size());
+
         ClaimDAO dao = new ClaimDAO();
 
-        boolean success = dao.addClaim(claim);
+        boolean success = dao.addClaim(claim, submittedAnswers);
 
         if (success) {
             response.sendRedirect("claim.html");

@@ -1,6 +1,7 @@
 package com.findify.model;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 
 public class Claim {
@@ -8,7 +9,6 @@ public class Claim {
     private int claimId;
     private int foundId;
     private int claimantId;
-    private String proof;
     private String status;
     private Timestamp claimDate;
 
@@ -22,29 +22,61 @@ public class Claim {
     private java.sql.Date dateFound;
     private String itemImage;
 
-    private int trustScore;
+    // Verification-question result (replaces the old keyword trust score)
+    private int matchedAnswers;
+    private int totalQuestions;
+
+    // Per-question breakdown for the admin review screen
+    private List<ClaimAnswer> answers;
 
     public Claim() {
     }
 
-    public Claim(int claimId, int foundId, int claimantId, String proof,
+    public Claim(int claimId, int foundId, int claimantId,
             String status, Timestamp claimDate) {
 
    this.claimId = claimId;
    this.foundId = foundId;
    this.claimantId = claimantId;
-   this.proof = proof;
    this.status = status;
    this.claimDate = claimDate;
 }
 
 
-	public int getTrustScore() {
-		return trustScore;
+	public int getMatchedAnswers() {
+		return matchedAnswers;
 	}
 
-	public void setTrustScore(int trustScore) {
-		this.trustScore = trustScore;
+	public void setMatchedAnswers(int matchedAnswers) {
+		this.matchedAnswers = matchedAnswers;
+	}
+
+	public int getTotalQuestions() {
+		return totalQuestions;
+	}
+
+	public void setTotalQuestions(int totalQuestions) {
+		this.totalQuestions = totalQuestions;
+	}
+
+	/**
+	 * 0-100 match percentage, used for the admin dashboard's colour-coded
+	 * bar/pill. Returns 0 when there were no questions to avoid a
+	 * divide-by-zero.
+	 */
+	public int getMatchPercentage() {
+		if (totalQuestions <= 0) {
+			return 0;
+		}
+		return (matchedAnswers * 100) / totalQuestions;
+	}
+
+	public List<ClaimAnswer> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(List<ClaimAnswer> answers) {
+		this.answers = answers;
 	}
 
 	public String getItemName() {
@@ -121,12 +153,6 @@ public class Claim {
 	public void setClaimantId(int claimantId) {
 		this.claimantId = claimantId;
 	}
-	public String getProof() {
-		return proof;
-	}
-	public void setProof(String proof) {
-		this.proof = proof;
-	}
 	public String getStatus() {
 		return status;
 	}
@@ -141,8 +167,9 @@ public class Claim {
 	}
 	@Override
 	public String toString() {
-		return "Claim [claimId=" + claimId + ", foundId=" + foundId + ", claimantId=" + claimantId + ", proof=" + proof
-				+ ", status=" + status + ", claimDate=" + claimDate + "]";
+		return "Claim [claimId=" + claimId + ", foundId=" + foundId + ", claimantId=" + claimantId
+				+ ", status=" + status + ", claimDate=" + claimDate
+				+ ", matchedAnswers=" + matchedAnswers + ", totalQuestions=" + totalQuestions + "]";
 	}
 
 }

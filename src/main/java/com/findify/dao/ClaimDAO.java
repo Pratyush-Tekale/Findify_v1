@@ -6,30 +6,71 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import com.findify.model.Claim;
+import com.findify.model.ClaimAnswer;
 import com.findify.util.DBConnection;
 
 public class ClaimDAO {
 
-	public boolean addClaim(Claim claim) {
-	    try (Connection con = DBConnection.getConnection()) {
+	private final ClaimAnswerDAO answerDao = new ClaimAnswerDAO();
+
+	/**
+	 * Inserts the claim row plus one claim_answers row per submitted
+	 * verification answer, in a single transaction (all rows share the
+	 * generated claim_id, so either everything is saved or nothing is).
+	 */
+	public boolean addClaim(Claim claim, List<ClaimAnswer> answers) {
+
+	    Connection con = null;
+
+	    try {
+	        con = DBConnection.getConnection();
+	        con.setAutoCommit(false);
+
 	        String sql =
-	            "INSERT INTO claims(found_id, claimant_id, proof, status, trust_score) " +
+	            "INSERT INTO claims(found_id, claimant_id, status, matched_answers, total_questions) " +
 	            "VALUES (?, ?, ?, ?, ?)";
-	        PreparedStatement ps = con.prepareStatement(sql);
+	        PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 	        ps.setInt(1, claim.getFoundId());
 	        ps.setInt(2, claim.getClaimantId());
-	        ps.setString(3, claim.getProof());
-	        ps.setString(4, claim.getStatus());
-	        ps.setInt(5, claim.getTrustScore());
+	        ps.setString(3, claim.getStatus());
+	        ps.setInt(4, claim.getMatchedAnswers());
+	        ps.setInt(5, claim.getTotalQuestions());
 
 	        int rows = ps.executeUpdate();
 
-	        return rows > 0;
+	        if (rows == 0) {
+	            con.rollback();
+	            return false;
+	        }
+
+	        int claimId = 0;
+	        ResultSet keys = ps.getGeneratedKeys();
+	        if (keys.next()) {
+	            claimId = keys.getInt(1);
+	        }
+
+	        if (answers != null) {
+	            for (ClaimAnswer a : answers) {
+	                answerDao.addAnswer(con, claimId, a.getQuestionId(),
+	                        a.getSubmittedAnswer(), a.isCorrect());
+	            }
+	        }
+
+	        con.commit();
+	        return true;
 
 	    } catch (SQLException e) {
 	        e.printStackTrace();
+	        if (con != null) {
+	            try { con.rollback(); } catch (SQLException ignored) { }
+	        }
+	    } finally {
+	        if (con != null) {
+	            try { con.setAutoCommit(true); con.close(); } catch (SQLException ignored) { }
+	        }
 	    }
 
 	    return false;
@@ -47,10 +88,10 @@ public class ClaimDAO {
                 claim.setClaimId(rs.getInt("claim_id"));
                 claim.setFoundId(rs.getInt("found_id"));
                 claim.setClaimantId(rs.getInt("claimant_id"));
-                claim.setProof(rs.getString("proof"));
                 claim.setStatus(rs.getString("status"));
                 claim.setClaimDate(rs.getTimestamp("claim_date"));
-                claim.setTrustScore(rs.getInt("trust_score"));
+                claim.setMatchedAnswers(rs.getInt("matched_answers"));
+                claim.setTotalQuestions(rs.getInt("total_questions"));
 
                 claims.add(claim);
             }
@@ -84,32 +125,22 @@ public class ClaimDAO {
             ps.setString(1, status);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Claim claim = new Claim();
-                claim.setClaimId(rs.getInt("claim_id"));
-                claim.setFoundId(rs.getInt("found_id"));
-                claim.setClaimantId(rs.getInt("claimant_id"));
-                claim.setProof(rs.getString("proof"));
-                claim.setStatus(rs.getString("status"));
-                claim.setClaimDate(rs.getTimestamp("claim_date"));
-
-                claim.setItemName(rs.getString("item_name"));
-                claim.setItemDescription(rs.getString("description"));
-                claim.setLocationFound(rs.getString("location_found"));
-                claim.setDateFound(rs.getDate("date_found"));
-                claim.setItemImage(rs.getString("image"));
-                claim.setClaimantName(rs.getString("full_name"));
-                claim.setClaimantPhone(rs.getString("phone"));
-                claim.setTrustScore(rs.getInt("trust_score"));
-
-                claims.add(claim);
+                claims.add(mapClaimWithDetails(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        attachAnswers(claims);
         return claims;
     }
 
+    /**
+     * All claims whose verification match rate is at least 75% — the
+     * default "trustworthy" view on the admin dashboard. Equivalent to the
+     * old trust_score >= 75 filter, now computed from matched/total
+     * questions. Claims with zero questions never qualify.
+     */
     public List<Claim> getAllClaims() {
 
         List<Claim> claims = new ArrayList<>();
@@ -130,7 +161,8 @@ public class ClaimDAO {
                     "ON c.found_id = f.found_id " +
                     "LEFT JOIN users u " +
                     "ON c.claimant_id = u.user_id " +
-                    "WHERE c.trust_score >= 75 " +
+                    "WHERE c.total_questions > 0 " +
+                    "AND (c.matched_answers / c.total_questions) >= 0.75 " +
                     "ORDER BY c.claim_date DESC";
 
             PreparedStatement ps = con.prepareStatement(sql);
@@ -138,42 +170,22 @@ public class ClaimDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-
-                Claim claim = new Claim();
-
-                claim.setClaimId(rs.getInt("claim_id"));
-                claim.setFoundId(rs.getInt("found_id"));
-                claim.setClaimantId(rs.getInt("claimant_id"));
-
-                claim.setProof(rs.getString("proof"));
-                claim.setStatus(rs.getString("status"));
-                claim.setClaimDate(rs.getTimestamp("claim_date"));
-
-                claim.setItemName(rs.getString("item_name"));
-                claim.setItemDescription(rs.getString("description"));
-                claim.setLocationFound(rs.getString("location_found"));
-                claim.setDateFound(rs.getDate("date_found"));
-                claim.setItemImage(rs.getString("image"));
-
-                claim.setClaimantName(rs.getString("full_name"));
-                claim.setClaimantPhone(rs.getString("phone"));
-
-                claim.setTrustScore(rs.getInt("trust_score"));
-
-                claims.add(claim);
+                claims.add(mapClaimWithDetails(rs));
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        attachAnswers(claims);
         return claims;
     }
+
     /**
-     * Most recent claims regardless of status/trust score — used for the
+     * Most recent claims regardless of status/match rate — used for the
      * admin dashboard "Recent Activity" feed. Unlike getAllClaims(), this
-     * is NOT filtered by trust_score, since the activity feed should show
-     * everything that just happened, including low-trust claims.
+     * is NOT filtered by match rate, since the activity feed should show
+     * everything that just happened, including low-match claims.
      */
     public List<Claim> getRecentClaims(int limit) {
         List<Claim> claims = new ArrayList<>();
@@ -199,29 +211,13 @@ public class ClaimDAO {
             ps.setInt(1, limit);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Claim claim = new Claim();
-                claim.setClaimId(rs.getInt("claim_id"));
-                claim.setFoundId(rs.getInt("found_id"));
-                claim.setClaimantId(rs.getInt("claimant_id"));
-                claim.setProof(rs.getString("proof"));
-                claim.setStatus(rs.getString("status"));
-                claim.setClaimDate(rs.getTimestamp("claim_date"));
-
-                claim.setItemName(rs.getString("item_name"));
-                claim.setItemDescription(rs.getString("description"));
-                claim.setLocationFound(rs.getString("location_found"));
-                claim.setDateFound(rs.getDate("date_found"));
-                claim.setItemImage(rs.getString("image"));
-                claim.setClaimantName(rs.getString("full_name"));
-                claim.setClaimantPhone(rs.getString("phone"));
-                claim.setTrustScore(rs.getInt("trust_score"));
-
-                claims.add(claim);
+                claims.add(mapClaimWithDetails(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        attachAnswers(claims);
         return claims;
     }
 
@@ -243,41 +239,23 @@ public class ClaimDAO {
         	        "LEFT JOIN users u " +
         	        "ON c.claimant_id = u.user_id " +
         	        "WHERE (f.item_name LIKE ? " +
-        	        "OR u.full_name LIKE ? " +
-        	        "OR c.proof LIKE ?) " +
-        	        "AND c.trust_score >= 75 " +
+        	        "OR u.full_name LIKE ?) " +
+        	        "AND c.total_questions > 0 " +
+        	        "AND (c.matched_answers / c.total_questions) >= 0.75 " +
         	        "ORDER BY c.claim_date DESC";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, "%" + search + "%");
             ps.setString(2, "%" + search + "%");
-            ps.setString(3, "%" + search + "%");
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Claim claim = new Claim();
-                claim.setClaimId(rs.getInt("claim_id"));
-                claim.setFoundId(rs.getInt("found_id"));
-                claim.setClaimantId(rs.getInt("claimant_id"));
-
-                claim.setItemName(rs.getString("item_name"));
-                claim.setItemDescription(rs.getString("description"));
-                claim.setLocationFound(rs.getString("location_found"));
-                claim.setDateFound(rs.getDate("date_found"));
-                claim.setItemImage(rs.getString("image"));
-                claim.setClaimantName(rs.getString("full_name"));
-                claim.setClaimantPhone(rs.getString("phone"));
-
-                claim.setProof(rs.getString("proof"));
-                claim.setStatus(rs.getString("status"));
-                claim.setClaimDate(rs.getTimestamp("claim_date"));
-                claim.setTrustScore(rs.getInt("trust_score"));
-
-                claims.add(claim);
+                claims.add(mapClaimWithDetails(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        attachAnswers(claims);
         return claims;
     }
 
@@ -327,10 +305,10 @@ public class ClaimDAO {
                 claim.setClaimId(rs.getInt("claim_id"));
                 claim.setFoundId(rs.getInt("found_id"));
                 claim.setClaimantId(rs.getInt("claimant_id"));
-                claim.setProof(rs.getString("proof"));
                 claim.setStatus(rs.getString("status"));
                 claim.setClaimDate(rs.getTimestamp("claim_date"));
-                claim.setTrustScore(rs.getInt("trust_score"));
+                claim.setMatchedAnswers(rs.getInt("matched_answers"));
+                claim.setTotalQuestions(rs.getInt("total_questions"));
 
                 return claim;
             }
@@ -387,5 +365,35 @@ public class ClaimDAO {
         }
 
         return 0;
+    }
+
+    private Claim mapClaimWithDetails(ResultSet rs) throws SQLException {
+        Claim claim = new Claim();
+
+        claim.setClaimId(rs.getInt("claim_id"));
+        claim.setFoundId(rs.getInt("found_id"));
+        claim.setClaimantId(rs.getInt("claimant_id"));
+        claim.setStatus(rs.getString("status"));
+        claim.setClaimDate(rs.getTimestamp("claim_date"));
+        claim.setMatchedAnswers(rs.getInt("matched_answers"));
+        claim.setTotalQuestions(rs.getInt("total_questions"));
+
+        claim.setItemName(rs.getString("item_name"));
+        claim.setItemDescription(rs.getString("description"));
+        claim.setLocationFound(rs.getString("location_found"));
+        claim.setDateFound(rs.getDate("date_found"));
+        claim.setItemImage(rs.getString("image"));
+        claim.setClaimantName(rs.getString("full_name"));
+        claim.setClaimantPhone(rs.getString("phone"));
+
+        return claim;
+    }
+
+    // Attaches the per-question breakdown to each claim for the admin
+    // detail modal. One query per claim — fine at prototype scale.
+    private void attachAnswers(List<Claim> claims) {
+        for (Claim c : claims) {
+            c.setAnswers(answerDao.getAnswersByClaimId(c.getClaimId()));
+        }
     }
 }

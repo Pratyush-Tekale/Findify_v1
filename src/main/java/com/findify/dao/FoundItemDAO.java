@@ -12,10 +12,13 @@ import com.findify.util.DBConnection;
 public class FoundItemDAO {
 
     // INSERT FOUND ITEM
+    // Returns the generated found_id so the caller can attach verification
+    // questions to it, or -1 on failure (kept boolean-compatible callers
+    // can just check result > 0).
 
-    public boolean addFoundItem(FoundItem item) {
+    public int addFoundItem(FoundItem item) {
 
-        boolean status = false;
+        int generatedId = -1;
 
         try {
 
@@ -24,7 +27,7 @@ public class FoundItemDAO {
             String query =
             "INSERT INTO found_items(user_id, category_id, item_name, description, location_found, date_found, image) VALUES(?,?,?,?,?,?,?)";
 
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = con.prepareStatement(query, java.sql.Statement.RETURN_GENERATED_KEYS);
 
             ps.setInt(1, item.getUserId());
 
@@ -43,7 +46,10 @@ public class FoundItemDAO {
             int rows = ps.executeUpdate();
 
             if (rows > 0) {
-                status = true;
+                ResultSet keys = ps.getGeneratedKeys();
+                if (keys.next()) {
+                    generatedId = keys.getInt(1);
+                }
             }
 
             ps.close();
@@ -55,7 +61,7 @@ public class FoundItemDAO {
 
         }
 
-        return status;
+        return generatedId;
 
     }
 

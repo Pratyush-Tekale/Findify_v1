@@ -46,49 +46,59 @@ FINDIFY
 Provide proof that this item belongs to you. Our admin will review your request before approving it.
 </p>
 
-<form action="ClaimServlet" method="post">
+<%@ page import="java.util.List" %>
+<%@ page import="com.findify.dao.VerificationQuestionDAO" %>
+<%@ page import="com.findify.model.VerificationQuestion" %>
 
 <%
 String foundId = request.getParameter("foundId");
+
+List<VerificationQuestion> questions = null;
+if (foundId != null) {
+    questions = new VerificationQuestionDAO()
+            .getQuestionsByFoundId(Integer.parseInt(foundId));
+}
 %>
+
+<% if ("noquestions".equals(request.getParameter("error"))) { %>
+<p style="color:#c0392b;">
+This item has no verification questions on file yet — please contact the admin.
+</p>
+<% } %>
+
+<% if (questions == null || questions.isEmpty()) { %>
+
+<p style="color:#c0392b;">
+No verification questions are available for this item.
+</p>
+
+<% } else { %>
+
+<form action="ClaimServlet" method="post">
 
 <input type="hidden"
        name="foundId"
        value="<%= foundId %>">
-       
+
     <!-- Hidden Item ID -->
+
+    <% for (VerificationQuestion q : questions) { %>
 
     <div class="input-group">
 
-        <label>Proof of Ownership
+        <label><%= q.getQuestionText() %>
         <span style="color:#c0392b;">*</span>
         </label>
 
-        <textarea
-            id="proof"
-            name="proof"
-            rows="6"
-            placeholder="Describe something that proves this item belongs to you. Example: color, serial number, unique marks, contents, ID card inside, etc."
-            required>
-        </textarea>
-
-    </div>
-
-    <div class="input-group">
-
-        <label>Supporting Image (Optional)</label>
-
         <input
-            type="file"
-            id="proofFile"
-            name="proofFile"
-            accept=".jpg,.jpeg,.png">
-
-        <small>
-            (Optional for now. File upload will be connected later.)
-        </small>
+            type="text"
+            name="answer_<%= q.getQuestionId() %>"
+            placeholder="Your answer"
+            required>
 
     </div>
+
+    <% } %>
 
     <button type="submit" class="verify-btn">
 
@@ -97,6 +107,8 @@ String foundId = request.getParameter("foundId");
     </button>
 
 </form>
+
+<% } %>
 
 <div class="back-link">
 

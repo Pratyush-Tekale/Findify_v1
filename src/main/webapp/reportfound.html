@@ -178,6 +178,62 @@ name="image">
 
 </div>
 
+<div class="verify-questions">
+
+<h4>PRIVATE VERIFICATION QUESTIONS</h4>
+
+<p class="hint">
+These questions and answers are never shown to the public. Only someone who
+knows the answer will be able to claim this item — pick details that
+aren't visible in your public description above (a serial number, an
+engraving, what's inside a pocket, etc). Provide at least 3, up to 5.
+</p>
+
+<div id="questionRows">
+
+<div class="row qa-row">
+<div class="input-group">
+<label>Question 1<span style="color:#c0392b;">*</span></label>
+<input type="text" name="question1" placeholder="e.g. What brand is it?" required>
+</div>
+<div class="input-group">
+<label>Answer 1<span style="color:#c0392b;">*</span></label>
+<input type="text" name="answer1" placeholder="e.g. Casio" required>
+</div>
+</div>
+
+<div class="row qa-row">
+<div class="input-group">
+<label>Question 2<span style="color:#c0392b;">*</span></label>
+<input type="text" name="question2" placeholder="e.g. Any engraving or mark?" required>
+</div>
+<div class="input-group">
+<label>Answer 2<span style="color:#c0392b;">*</span></label>
+<input type="text" name="answer2" placeholder="e.g. Letter P on the back">
+</div>
+</div>
+
+<div class="row qa-row">
+<div class="input-group">
+<label>Question 3<span style="color:#c0392b;">*</span></label>
+<input type="text" name="question3" placeholder="e.g. What type/model?" required>
+</div>
+<div class="input-group">
+<label>Answer 3<span style="color:#c0392b;">*</span></label>
+<input type="text" name="answer3" placeholder="e.g. Analog">
+</div>
+</div>
+
+</div>
+
+<div id="extraQuestionRows"></div>
+
+<button type="button" id="addQuestionBtn" class="add-question-btn">
++ Add another question (optional)
+</button>
+
+</div>
+
 <button
 type="submit"
 class="submit-btn">
@@ -203,6 +259,7 @@ Submit Found Report
 </section>
 
 <script src="js/reportFound.js"></script>
+<script src="js/verificationQuestions.js"></script>
 
 </body>
 </html>

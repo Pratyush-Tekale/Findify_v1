@@ -1,22 +1,27 @@
+document.addEventListener("DOMContentLoaded", () => {
 
+    const form = document.querySelector("form");
 
-const form = document.querySelector("form");
-const proof = document.getElementById("proof");
-
-form.addEventListener("submit", function (e) {
-
-    if (proof.value.trim().length < 15) {
-
-        e.preventDefault();
-
-        alert("Please provide more details to prove ownership (minimum 15 characters).");
-
-        proof.focus();
-
+    if (!form) {
         return;
     }
 
-    // Don't call preventDefault().
-    // Let the browser submit the form to ClaimServlet.
+    form.addEventListener("submit", function (e) {
+
+        const answers = form.querySelectorAll("input[name^='answer_']");
+
+        for (const input of answers) {
+            if (input.value.trim().length === 0) {
+                e.preventDefault();
+                alert("Please answer every verification question.");
+                input.focus();
+                return;
+            }
+        }
+
+        // Don't call preventDefault() here.
+        // Let the browser submit the form to ClaimServlet.
+
+    });
 
 });

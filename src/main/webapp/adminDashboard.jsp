@@ -122,7 +122,7 @@ if (!"ADMIN".equals(loggedInUser.getRole())) {
               <th>Item</th>
               <th>Claimed By</th>
               <th>Phone</th>
-              <th>Trust</th>
+              <th>Verification</th>
               <th>Claim Date</th>
               <th>Status</th>
               <th>Actions</th>
@@ -146,12 +146,12 @@ if (!"ADMIN".equals(loggedInUser.getRole())) {
     <div class="trust-bar">
         <div class="track">
             <div
-                class="fill ${claim.trustScore >= 75 ? 'high' : claim.trustScore >= 40 ? 'mid' : 'low'}"
-                style="width:${claim.trustScore}%;">
+                class="fill ${claim.matchPercentage >= 75 ? 'high' : claim.matchPercentage >= 40 ? 'mid' : 'low'}"
+                style="width:${claim.matchPercentage}%;">
             </div>
         </div>
 
-        <span>${claim.trustScore}</span>
+        <span>${claim.matchedAnswers}/${claim.totalQuestions}</span>
     </div>
 </td>
                     <td><fmt:formatDate value="${claim.claimDate}" pattern="dd MMM yyyy HH:mm"/></td>
@@ -181,11 +181,23 @@ if (!"ADMIN".equals(loggedInUser.getRole())) {
                         data-claimant="${fn:escapeXml(claim.claimantName)}"
                         data-claimant-id="${claim.claimantId}"
                         data-phone="${claim.claimantPhone}"
-                        data-proof="${fn:escapeXml(claim.proof)}"
-                        data-trust="${claim.trustScore}"
+                        data-matched="${claim.matchedAnswers}"
+                        data-total="${claim.totalQuestions}"
+                        data-match-pct="${claim.matchPercentage}"
+                        data-qa-id="qa-${claim.claimId}"
                         data-status="${claim.status}"
                         data-date="<fmt:formatDate value="${claim.claimDate}" pattern="dd MMM yyyy, HH:mm"/>"
                         onclick="openClaimModal(this.dataset)">View</button>
+                      <div id="qa-${claim.claimId}" style="display:none;">
+                        <c:forEach var="ans" items="${claim.answers}">
+                          <div class="qa-item">
+                            <strong>${fn:escapeXml(ans.questionText)}</strong>
+                            <div>Correct answer: ${fn:escapeXml(ans.correctAnswer)}</div>
+                            <div>Submitted: ${fn:escapeXml(ans.submittedAnswer)}
+                              ${ans.correct ? '&#9989;' : '&#10060;'}</div>
+                          </div>
+                        </c:forEach>
+                      </div>
                       <c:if test="${claim.status=='PENDING'}">
                         <form action="ManageClaimsServlet" method="post" style="display:inline;">
                           <input type="hidden" name="claimId" value="${claim.claimId}">
@@ -277,7 +289,7 @@ if (!"ADMIN".equals(loggedInUser.getRole())) {
         <span id="mStatus"></span>
       </div>
       <div class="modal-row">
-        <span class="modal-label">Trust Score</span>
+        <span class="modal-label">Verification Score</span>
         <span id="mTrust"></span>
       </div>
       <div id="mImageWrap" class="modal-row full" style="display:none;">
@@ -321,8 +333,8 @@ if (!"ADMIN".equals(loggedInUser.getRole())) {
         <span id="mDate"></span>
       </div>
       <div class="modal-row full">
-        <span class="modal-label">Proof Submitted (by Claimant)</span>
-        <p id="mProof" class="modal-proof"></p>
+        <span class="modal-label">Verification Q&amp;A</span>
+        <div id="mProof" class="modal-proof"></div>
       </div>
     </div>
   </div>
@@ -340,7 +352,10 @@ function openClaimModal(c) {
   document.getElementById('mClaimantId').textContent = 'user_id: ' + c.claimantId;
   document.getElementById('mPhone').textContent = c.phone || '—';
   document.getElementById('mDate').textContent = c.date || '—';
-  document.getElementById('mProof').textContent = c.proof || 'No proof text submitted.';
+
+  var qaSource = document.getElementById(c.qaId);
+  document.getElementById('mProof').innerHTML =
+    qaSource && qaSource.innerHTML.trim() !== '' ? qaSource.innerHTML : '<p>No verification questions on file.</p>';
 
   var imgWrap = document.getElementById('mImageWrap');
   var img = document.getElementById('mImage');
@@ -351,8 +366,10 @@ function openClaimModal(c) {
     imgWrap.style.display = 'none';
   }
 
+  var pct = Number(c.matchPct || 0);
   document.getElementById('mTrust').innerHTML =
-    '<span class="trust-pill ' + (c.trust >= 75 ? 'high' : c.trust >= 40 ? 'mid' : 'low') + '">' + c.trust + ' / 100</span>';
+    '<span class="trust-pill ' + (pct >= 75 ? 'high' : pct >= 40 ? 'mid' : 'low') + '">' +
+    c.matched + ' / ' + c.total + ' questions (' + pct + '%)</span>';
 
   var statusHtml = c.status === 'PENDING' ? '<span class="badge badge-amber">Pending</span>'
     : c.status === 'APPROVED' ? '<span class="badge badge-green">Approved</span>'
