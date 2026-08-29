@@ -13,7 +13,7 @@ public class FoundItemDAO {
 
     // INSERT FOUND ITEM
     // Returns the generated found_id so the caller can attach verification
-    // questions to it, or -1 on failure (kept boolean-compatible callers
+    // Returns the new found-item ID, or -1 on failure.
     // can just check result > 0).
 
     public int addFoundItem(FoundItem item) {

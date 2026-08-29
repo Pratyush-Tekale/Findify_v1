@@ -43,33 +43,39 @@ FINDIFY
 <h1>Claim Found Item</h1>
 
 <p>
-Provide proof that this item belongs to you. Our admin will review your request before approving it.
+Provide proof that this item belongs to you. Our AI compares your description
+against the finder's private notes, and our admin reviews the result before
+approving it.
 </p>
 
-<%@ page import="java.util.List" %>
-<%@ page import="com.findify.dao.VerificationQuestionDAO" %>
-<%@ page import="com.findify.model.VerificationQuestion" %>
+<%@ page import="com.findify.dao.FoundItemDAO" %>
+<%@ page import="com.findify.model.FoundItem" %>
 
 <%
 String foundId = request.getParameter("foundId");
 
-List<VerificationQuestion> questions = null;
+FoundItem foundItem = null;
 if (foundId != null) {
-    questions = new VerificationQuestionDAO()
-            .getQuestionsByFoundId(Integer.parseInt(foundId));
+    foundItem = new FoundItemDAO().getFoundItemById(Integer.parseInt(foundId));
 }
 %>
 
-<% if ("noquestions".equals(request.getParameter("error"))) { %>
+<% if ("empty".equals(request.getParameter("error"))) { %>
 <p style="color:#c0392b;">
-This item has no verification questions on file yet — please contact the admin.
+Please describe the item before submitting.
 </p>
 <% } %>
 
-<% if (questions == null || questions.isEmpty()) { %>
+<% if ("notfound".equals(request.getParameter("error"))) { %>
+<p style="color:#c0392b;">
+This item could not be found.
+</p>
+<% } %>
+
+<% if (foundItem == null) { %>
 
 <p style="color:#c0392b;">
-No verification questions are available for this item.
+This item is not available for claiming right now.
 </p>
 
 <% } else { %>
@@ -80,25 +86,24 @@ No verification questions are available for this item.
        name="foundId"
        value="<%= foundId %>">
 
-    <!-- Hidden Item ID -->
-
-    <% for (VerificationQuestion q : questions) { %>
-
     <div class="input-group">
 
-        <label><%= q.getQuestionText() %>
+        <label>Describe this item in your own words
         <span style="color:#c0392b;">*</span>
         </label>
 
-        <input
-            type="text"
-            name="answer_<%= q.getQuestionId() %>"
-            placeholder="Your answer"
-            required>
+        <p style="font-size:0.85rem;color:#666;margin-top:-6px;">
+        Include details only the real owner would know — brand, color, marks,
+        scratches, what's inside, etc.
+        </p>
+
+        <textarea
+            name="description"
+            rows="6"
+            placeholder="e.g. Black leather wallet, small tear on the left corner, has a blue metro card and a photo of a dog inside..."
+            required></textarea>
 
     </div>
-
-    <% } %>
 
     <button type="submit" class="verify-btn">
 
@@ -112,7 +117,7 @@ No verification questions are available for this item.
 
 <div class="back-link">
 
-<a href="index.html">
+<a href="index.jsp">
 
 ← Back to Home
 
@@ -124,7 +129,6 @@ No verification questions are available for this item.
 
 </section>
 
-<script src="js/verifyy.js"></script>
 
 </body>
 </html>

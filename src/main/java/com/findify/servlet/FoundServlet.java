@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
 import com.findify.dao.FoundItemDAO;
-import com.findify.dao.VerificationQuestionDAO;
 import com.findify.model.FoundItem;
 
 @SuppressWarnings("serial")
@@ -132,23 +131,10 @@ public class FoundServlet extends HttpServlet {
 
             if(foundId > 0)
             {
-                // Private verification questions (3-5 of them). Answers are
-                // never shown on the public Found Items page — they're only
-                // used later to score a claimant's submitted answers.
-                VerificationQuestionDAO qDao = new VerificationQuestionDAO();
-
-                for (int i = 1; i <= 5; i++) {
-
-                    String q = request.getParameter("question" + i);
-                    String a = request.getParameter("answer" + i);
-
-                    if (q != null && !q.trim().isEmpty()
-                            && a != null && !a.trim().isEmpty()) {
-
-                        qDao.addQuestion(foundId, q.trim(), a.trim());
-                    }
-                }
-
+                // CHANGED: no more per-question verification rows. The
+                // description above IS the private verification baseline —
+                // ClaimServlet/GeminiMatcher compares a claimant's submitted
+                // description against this one.
                 response.sendRedirect("found-success.html");
             }
             else

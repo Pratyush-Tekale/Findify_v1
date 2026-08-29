@@ -1,18 +1,13 @@
 package com.findify.servlet;
 
-
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.findify.dao.ClaimDAO;
-import com.findify.dao.VerificationQuestionDAO;
+import com.findify.dao.FoundItemDAO;
 import com.findify.model.Claim;
-import com.findify.model.ClaimAnswer;
+import com.findify.model.FoundItem;
 import com.findify.model.User;
-import com.findify.model.VerificationQuestion;
-import com.findify.util.AnswerMatcher;
+import com.findify.util.GeminiMatcher;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -27,6 +22,11 @@ public class ClaimServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
+    // Claims Gemini scores at or above this confidence (and marks as a
+    // match) are approved automatically instead of sitting in the admin
+    // queue. Everything below it still goes to a human for review.
+    private static final int AUTO_APPROVE_CONFIDENCE = 80;
+
     public ClaimServlet() {
         super();
     }
@@ -36,6 +36,7 @@ public class ClaimServlet extends HttpServlet {
             throws ServletException, IOException {
 
         int foundId = Integer.parseInt(request.getParameter("foundId"));
+        String submittedDescription = request.getParameter("description");
 
         HttpSession session = request.getSession(false);
 
@@ -51,48 +52,42 @@ public class ClaimServlet extends HttpServlet {
             return;
         }
 
-        // Load the private questions (with their correct answers) for this
-        // found item — never sent back to the browser, used only here to
-        // score what the claimant just submitted.
-        VerificationQuestionDAO qDao = new VerificationQuestionDAO();
-        List<VerificationQuestion> questions = qDao.getQuestionsByFoundId(foundId);
-
-        if (questions.isEmpty()) {
-            response.sendRedirect("verify.jsp?foundId=" + foundId + "&error=noquestions");
+        if (submittedDescription == null || submittedDescription.trim().isEmpty()) {
+            response.sendRedirect("verify.jsp?foundId=" + foundId + "&error=empty");
             return;
         }
 
-        int matched = 0;
-        List<ClaimAnswer> submittedAnswers = new ArrayList<>();
+        FoundItem foundItem = new FoundItemDAO().getFoundItemById(foundId);
 
-        for (VerificationQuestion q : questions) {
-
-            String submitted = request.getParameter("answer_" + q.getQuestionId());
-
-            boolean isCorrect = AnswerMatcher.isMatch(q.getCorrectAnswer(), submitted);
-
-            if (isCorrect) {
-                matched++;
-            }
-
-            ClaimAnswer answer = new ClaimAnswer();
-            answer.setQuestionId(q.getQuestionId());
-            answer.setSubmittedAnswer(submitted);
-            answer.setCorrect(isCorrect);
-            submittedAnswers.add(answer);
+        if (foundItem == null) {
+            response.sendRedirect("verify.jsp?foundId=" + foundId + "&error=notfound");
+            return;
         }
+
+        submittedDescription = submittedDescription.trim();
+
+        // Compares the claimant's description against the finder's private
+        // original (found_items.description — never shown on the public
+        // pages) and returns a match flag, a 0-100 confidence, and a short
+        // human-readable reason for the admin to review.
+        GeminiMatcher.Result verdict =
+                GeminiMatcher.compare(foundItem.getDescription(), submittedDescription);
 
         Claim claim = new Claim();
 
         claim.setFoundId(foundId);
         claim.setClaimantId(loggedInUser.getUserId());
-        claim.setStatus("PENDING");
-        claim.setMatchedAnswers(matched);
-        claim.setTotalQuestions(questions.size());
+        claim.setSubmittedDescription(submittedDescription);
+        claim.setAiMatch(verdict.match);
+        claim.setAiConfidence(verdict.confidence);
+        claim.setAiReasoning(verdict.reasoning);
+
+        boolean autoApprove = verdict.match && verdict.confidence >= AUTO_APPROVE_CONFIDENCE;
+        claim.setStatus(autoApprove ? "APPROVED" : "PENDING");
 
         ClaimDAO dao = new ClaimDAO();
 
-        boolean success = dao.addClaim(claim, submittedAnswers);
+        boolean success = dao.addClaim(claim);
 
         if (success) {
             response.sendRedirect("claim.html");

@@ -1143,18 +1143,19 @@ nav{
         grid-template-columns:1fr;
     }
 }
-/* VERIFICATION Q&A BREAKDOWN */
 
-.qa-item{
+/* AI claim verification details */
+.ai-detail{
     padding:8px 0;
     border-bottom:1px dashed var(--card-line);
 }
 
-.qa-item:last-child{
+.ai-detail:last-child{
     border-bottom:none;
 }
 
-.qa-item div{
+.ai-detail div{
     font-size:13px;
     color:var(--muted);
+    margin-top:4px;
 }
