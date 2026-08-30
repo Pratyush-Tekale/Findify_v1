@@ -47,7 +47,7 @@ Dashboard dashboard=(Dashboard)request.getAttribute("dashboard");
 
 <li><a href="#">📋 My Claims</a></li>
 
-<li><a href="index.jsp">Homes</a></li>
+<li><a href="index.jsp">Home</a></li>
 
 <li><a href="LogoutServlet">Logout</a></li>
 
@@ -61,13 +61,43 @@ Dashboard dashboard=(Dashboard)request.getAttribute("dashboard");
 
 <div class="header">
 
-<h1>Welcome,
-<%= user.getFullName() %> 👋
-</h1>
+    <div class="welcome-text">
 
-<p>
-Manage your Findify account from here.
-</p>
+        <h1>
+            Welcome,
+            <%= user.getFullName() %> 👋
+        </h1>
+
+        <p>
+            Manage your Findify account from here.
+        </p>
+
+    </div>
+
+
+    <!-- NOTIFICATION BELL -->
+
+    <a href="NotificationServlet"
+       class="notification-bell">
+
+        🔔
+
+        <%
+            Integer unreadCount =
+                (Integer) request.getAttribute("unreadCount");
+
+            if (unreadCount != null && unreadCount > 0) {
+        %>
+
+            <span class="notification-count">
+                <%= unreadCount %>
+            </span>
+
+        <%
+            }
+        %>
+
+    </a>
 
 </div>
 
@@ -162,18 +192,18 @@ Manage your Findify account from here.
     
 	<!-- MY CLAIMS -->
     <button type="button"
-            onclick="location.href='viewmyitems.html'">
+        onclick="location.href='MyReportsServlet'">
 
-        <span class="action-badge">Your Reported Items</span>
+        <span class="action-badge">MY ACTIVITY</span>
 
-        <span class="action-title">
-            <span class="action-icon">📋</span>
-            View My Reported Items
-        </span>
+<span class="action-title">
+    <span class="action-icon">📋</span>
+    View My Reports & Claims
+</span>
 
-        <span class="action-description">
-            Check items you have Reported	
-        </span>
+<span class="action-description">
+    View your lost reports, found reports, and claimed items.
+</span>
 
         <span class="action-open">
             Open →

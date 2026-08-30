@@ -238,4 +238,41 @@ public class ClaimDAO {
 
         return claim;
     }
+    
+ // =====================================================
+ // GET CLAIMS MADE BY A USER
+ // =====================================================
+ public List<Claim> getClaimsByUser(int userId) {
+
+     List<Claim> claims = new ArrayList<>();
+
+     String sql =
+         baseClaimQuery() +
+         "WHERE c.claimant_id = ? " +
+         "ORDER BY c.claim_date DESC";
+
+     try (Connection con = DBConnection.getConnection();
+          PreparedStatement ps = con.prepareStatement(sql)) {
+
+         ps.setInt(1, userId);
+
+         try (ResultSet rs = ps.executeQuery()) {
+
+             while (rs.next()) {
+
+                 claims.add(
+                     mapClaimWithDetails(rs)
+                 );
+             }
+         }
+
+     } catch (SQLException e) {
+
+         e.printStackTrace();
+     }
+
+     return claims;
+ }
+ 
+ 
 }

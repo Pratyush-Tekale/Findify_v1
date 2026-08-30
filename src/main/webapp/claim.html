@@ -1,60 +1,174 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Findify | Claim Item</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
 
-<link rel="stylesheet" href="css/claim.css">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Findify | Claim Item</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="css/claim.css">
+
 </head>
+
 
 <body>
 
 <div class="container">
 
-<div class="card">
+    <div class="card">
 
-<h1>🎉 Verification Submitted</h1>
 
-<p class="message">
-Your verification request has been successfully submitted.
-</p>
+        <!-- =========================================
+             TITLE
+        ========================================== -->
 
-<div class="ticket">
+        <h1>
+            🎉 Verification Submitted
+        </h1>
 
-<h2>Claim Status</h2>
 
-<p><strong>Status :</strong> Pending Admin Verification</p>
+        <p class="message">
+            Your verification request has been successfully submitted.
+        </p>
 
-<p><strong>Item :</strong> Lost Item</p>
 
-<p><strong>Ticket ID :</strong> FND-2295</p>
 
-<p><strong>Response Time :</strong> Within 24 Hours</p>
+        <!-- =========================================
+             CLAIM STATUS
+        ========================================== -->
+
+        <div class="ticket">
+
+            <h2>
+                Claim Status
+            </h2>
+
+
+            <p>
+                <strong>Status :</strong>
+                Pending Admin Verification
+            </p>
+
+
+            <p>
+                <strong>Item :</strong>
+                <span id="claimedItem">
+                    Found Item
+                </span>
+            </p>
+
+
+            <p>
+                <strong>Ticket ID :</strong>
+                <span id="ticketId">
+                    Loading...
+                </span>
+            </p>
+
+
+            <p>
+                <strong>Response Time :</strong>
+                Within 24 Hours
+            </p>
+
+        </div>
+
+
+
+        <!-- =========================================
+             WHAT HAPPENS NEXT
+        ========================================== -->
+
+        <div class="info">
+
+            <h3>
+                What Happens Next?
+            </h3>
+
+
+            <ul>
+
+                <li>
+                    ✔ Admin will review the AI verification result.
+                </li>
+
+                <li>
+                    ✔ If the details support your claim,
+                    your request may be approved.
+                </li>
+
+                <li>
+                    ✔ You will receive confirmation from the admin.
+                </li>
+
+                <li>
+                    ✔ Visit the Lost &amp; Found Office
+                    with your College ID to collect the item.
+                </li>
+
+            </ul>
+
+        </div>
+
+
+
+        <!-- =========================================
+             BACK HOME
+        ========================================== -->
+
+        <a href="index.jsp"
+           class="btn">
+
+            Back to Home
+
+        </a>
+
+
+    </div>
 
 </div>
 
-<div class="info">
 
-<h3>What Happens Next?</h3>
 
-<ul>
-<li>✔ Admin will review the AI verification result.</li>
-<li>✔ If the details support your claim, your request may be approved.</li>
-<li>✔ You will receive confirmation from the admin.</li>
-<li>✔ Visit the Lost & Found Office with your College ID to collect the item.</li>
-</ul>
+<!-- =========================================
+     SHOW ACTUAL FOUND ITEM ID
+========================================== -->
 
-</div>
+<script>
 
-<a href="index.jsp" class="btn">Back to Home</a>
+    const params =
+        new URLSearchParams(window.location.search);
 
-</div>
+    const foundId =
+        params.get("foundId");
 
-</div>
+
+    if (foundId) {
+
+        document.getElementById("ticketId").textContent =
+            "FND-" + foundId;
+
+    } else {
+
+        document.getElementById("ticketId").textContent =
+            "Not Available";
+    }
+
+</script>
+
 
 </body>
+
 </html>

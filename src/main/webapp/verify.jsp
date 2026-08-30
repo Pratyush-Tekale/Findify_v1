@@ -93,7 +93,7 @@ This item is not available for claiming right now.
         </label>
 
         <p style="font-size:0.85rem;color:#666;margin-top:-6px;">
-        Include details only the real owner would know — brand, color, marks,
+        Include details only the real owner would know - brand, color, marks,
         scratches, what's inside, etc.
         </p>
 
@@ -119,7 +119,7 @@ This item is not available for claiming right now.
 
 <a href="index.jsp">
 
-← Back to Home
+<- Back to Home
 
 </a>
 

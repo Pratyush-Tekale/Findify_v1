@@ -1098,3 +1098,111 @@ a{
 
     color:var(--ink);
 }
+
+/* =====================================================
+   DASHBOARD HEADER
+===================================================== */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+
+/* =====================================================
+   WELCOME TEXT
+===================================================== */
+
+.welcome-text {
+    flex: 1;
+}
+
+
+/* =====================================================
+   NOTIFICATION BELL
+===================================================== */
+
+.notification-bell {
+    position: relative;
+
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #FBF7EE;
+
+    border: 2px solid #221E1A;
+    border-radius: 6px;
+
+    text-decoration: none;
+
+    font-size: 22px;
+
+    box-shadow: 3px 4px 0 rgba(0, 0, 0, 0.12);
+
+    transition: 0.2s ease;
+}
+
+
+.notification-bell:hover {
+    background: #B33A2D;
+
+    transform: translate(-2px, -2px);
+
+    box-shadow: 4px 5px 0 #221E1A;
+}
+
+
+/* =====================================================
+   UNREAD COUNT
+===================================================== */
+
+.notification-count {
+    position: absolute;
+
+    top: -8px;
+    right: -8px;
+
+    min-width: 21px;
+    height: 21px;
+
+    padding: 0 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #B33A2D;
+
+    color: #FFFFFF;
+
+    border: 2px solid #FBF7EE;
+
+    border-radius: 50%;
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 9px;
+
+    font-weight: 700;
+}
+
+
+@media (max-width: 600px) {
+
+    .header {
+        align-items: flex-start;
+    }
+
+    .notification-bell {
+        width: 42px;
+        height: 42px;
+        font-size: 19px;
+    }
+
+}

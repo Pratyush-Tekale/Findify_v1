@@ -48,7 +48,7 @@
 	
 	<nav>
 	
-	<a href="index.html">
+	<a href="index.jsp">
 	Home
 	</a>
 	
@@ -263,7 +263,32 @@ else{
 	
 	</section>
 	
-	
+	<!-- ================= FOUND ITEM CTA ================= -->
+
+<section class="found-cta">
+
+    <div class="container">
+
+        <div class="found-cta-card">
+
+            <h2 style="color: brown;">
+                Found any of these items?
+            </h2>
+
+            <p>
+                Help return a lost item to its owner.
+                Report it on Findify and make someone's day.
+            </p>
+
+            <a href="reportfound.html" class="found-cta-btn">
+                Report Found Item ->
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
 	
 	
 	

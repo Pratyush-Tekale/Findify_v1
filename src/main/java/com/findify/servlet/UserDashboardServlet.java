@@ -3,6 +3,7 @@ package com.findify.servlet;
 import java.io.IOException;
 
 import com.findify.dao.DashboardDAO;
+import com.findify.dao.NotificationDAO;
 import com.findify.model.Dashboard;
 import com.findify.model.User;
 
@@ -23,7 +24,6 @@ public class UserDashboardServlet extends HttpServlet {
                           HttpServletResponse response)
             throws ServletException, IOException {
 
-
         // Get existing session
         HttpSession session = request.getSession(false);
 
@@ -40,7 +40,8 @@ public class UserDashboardServlet extends HttpServlet {
         }
 
         // Get logged-in user
-        User user = (User) session.getAttribute("loggedInUser");
+        User user =
+                (User) session.getAttribute("loggedInUser");
 
         // Check user
         if (user == null) {
@@ -54,21 +55,58 @@ public class UserDashboardServlet extends HttpServlet {
             return;
         }
 
-       
+        // =====================================================
+        // DASHBOARD DATA
+        // =====================================================
 
-        // Create Dashboard DAO
-        DashboardDAO dao = new DashboardDAO();
+        DashboardDAO dashboardDAO =
+                new DashboardDAO();
 
-        // Get dashboard data
         Dashboard dashboard =
-                dao.getDashboardData(user.getUserId());
+                dashboardDAO.getDashboardData(
+                        user.getUserId()
+                );
 
-        // Send data to JSP
-        request.setAttribute("user", user);
-        request.setAttribute("dashboard", dashboard);
 
-        // Open dashboard
-        request.getRequestDispatcher("/userDashboard.jsp")
-               .forward(request, response);
+        // =====================================================
+        // NOTIFICATION DATA
+        // =====================================================
+
+        NotificationDAO notificationDAO =
+                new NotificationDAO();
+
+        int unreadCount =
+                notificationDAO.getUnreadCount(
+                        user.getUserId()
+                );
+
+
+        // =====================================================
+        // SEND DATA TO JSP
+        // =====================================================
+
+        request.setAttribute(
+                "user",
+                user
+        );
+
+        request.setAttribute(
+                "dashboard",
+                dashboard
+        );
+
+        request.setAttribute(
+                "unreadCount",
+                unreadCount
+        );
+
+
+        // =====================================================
+        // OPEN DASHBOARD
+        // =====================================================
+
+        request.getRequestDispatcher(
+                "/userDashboard.jsp"
+        ).forward(request, response);
     }
 }

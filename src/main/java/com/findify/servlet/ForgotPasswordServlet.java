@@ -60,7 +60,7 @@ public class ForgotPasswordServlet extends HttpServlet {
         session.setAttribute("otpExpiry", expiryTime);
 
         // Send OTP
-        EmailUtil.sendOTP(email, otp);
+        EmailUtil.sendOTP(email, otp, "Password Reset");
 
         response.sendRedirect("verifyOtp.jsp");
     }

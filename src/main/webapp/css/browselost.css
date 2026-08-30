@@ -745,3 +745,227 @@ height:160px;
 
 
 }
+/* =========================================================
+   FINDIFY - FOUND SOMETHING CTA
+========================================================= */
+
+.found-cta {
+    width: 100%;
+
+    background: #F3EEE1;
+
+    padding: 48px 0 52px;
+
+    border-top: 2px dashed #D8CDB4;
+}
+
+
+/* MAIN CTA CARD */
+
+.found-cta-card {
+
+    width: calc(100% - 40px);
+
+    max-width: 980px;
+
+    margin: 0 auto;
+
+    padding: 30px 40px 32px;
+
+    background: #FBF7EE;
+
+    border: 2px solid #221E1A;
+
+    border-radius: 5px;
+
+    box-shadow: 5px 6px 0 rgba(0, 0, 0, 0.13);
+
+    text-align: center;
+
+    position: relative;
+}
+
+
+/* =========================================================
+   PAPER TAPE
+========================================================= */
+
+.found-cta-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: -8px;
+
+    left: 50%;
+
+    width: 58px;
+
+    height: 14px;
+
+    background: rgba(227, 163, 67, 0.72);
+
+    border: 1px solid rgba(0, 0, 0, 0.12);
+
+    transform: translateX(-50%) rotate(-2deg);
+}
+
+
+/* =========================================================
+   SMALL RED LABEL
+========================================================= */
+
+.found-cta-label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+    color: #B33A2D;
+}
+
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.found-cta-card h2 {
+
+    margin: 0 0 10px;
+
+    font-family: 'Special Elite', monospace;
+
+    font-size: clamp(27px, 3vw, 36px);
+
+    line-height: 1.15;
+
+    font-weight: 400;
+
+    color: #221E1A;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.found-cta-card p {
+
+    max-width: 650px;
+
+    margin: 0 auto 20px;
+
+    font-family: 'Inter', sans-serif;
+
+    font-size: 14px;
+
+    line-height: 1.55;
+
+    color: #6B6255;
+}
+
+
+/* =========================================================
+   CTA BUTTON
+========================================================= */
+
+.found-cta-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 205px;
+
+    padding: 11px 20px;
+
+    background: #22303F;
+
+    color: #FFFFFF;
+
+    border: 2px solid #22303F;
+
+    border-radius: 3px;
+
+    text-decoration: none;
+
+    font-family: 'Inter', sans-serif;
+
+    font-size: 13.5px;
+
+    font-weight: 700;
+
+    transition:
+        transform 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+
+.found-cta-btn:hover {
+
+    background: #B33A2D;
+
+    border-color: #B33A2D;
+
+    transform: translate(-2px, -2px);
+
+    box-shadow: 4px 4px 0 #221E1A;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .found-cta {
+
+        padding: 38px 15px 42px;
+    }
+
+
+    .found-cta-card {
+
+        width: 100%;
+
+        padding: 28px 20px 30px;
+    }
+
+
+    .found-cta-card h2 {
+
+        font-size: 27px;
+    }
+
+
+    .found-cta-card p {
+
+        font-size: 13.5px;
+
+        margin-bottom: 18px;
+    }
+
+
+    .found-cta-btn {
+
+        width: 100%;
+
+        min-width: 0;
+    }
+
+}

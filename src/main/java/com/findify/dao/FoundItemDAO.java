@@ -215,5 +215,100 @@ public class FoundItemDAO {
         return 0;
     }
     
+ // =====================================================
+ // GET FOUND ITEMS REPORTED BY A USER
+ // =====================================================
+ public ArrayList<FoundItem> getFoundItemsByUser(int userId) {
+
+     ArrayList<FoundItem> list = new ArrayList<>();
+
+     String query =
+         "SELECT f.*, c.category_name " +
+         "FROM found_items f " +
+         "LEFT JOIN categories c " +
+         "ON f.category_id = c.category_id " +
+         "WHERE f.user_id = ? " +
+         "ORDER BY f.created_at DESC";
+
+     try (Connection con = DBConnection.getConnection();
+          PreparedStatement ps = con.prepareStatement(query)) {
+
+         ps.setInt(1, userId);
+
+         try (ResultSet rs = ps.executeQuery()) {
+
+             while (rs.next()) {
+
+                 FoundItem item = new FoundItem();
+
+                 item.setFoundId(rs.getInt("found_id"));
+                 item.setUserId(rs.getInt("user_id"));
+                 item.setCategoryId(rs.getInt("category_id"));
+
+                 item.setCategoryName(
+                     rs.getString("category_name")
+                 );
+
+                 item.setItemName(
+                     rs.getString("item_name")
+                 );
+
+                 item.setDescription(
+                     rs.getString("description")
+                 );
+
+                 item.setLocationFound(
+                     rs.getString("location_found")
+                 );
+
+                 item.setDateFound(
+                     rs.getString("date_found")
+                 );
+
+                 item.setImage(
+                     rs.getString("image")
+                 );
+
+                 item.setStatus(
+                     rs.getString("status")
+                 );
+
+                 list.add(item);
+             }
+         }
+
+     } catch (SQLException e) {
+
+         e.printStackTrace();
+     }
+
+     return list;
+ }
+
+
+ // =====================================================
+ // DELETE FOUND ITEM - ONLY OWNER CAN DELETE
+ // =====================================================
+ public boolean deleteFoundItem(int foundId, int userId) {
+
+     String sql =
+         "DELETE FROM found_items " +
+         "WHERE found_id = ? AND user_id = ?";
+
+     try (Connection con = DBConnection.getConnection();
+          PreparedStatement ps = con.prepareStatement(sql)) {
+
+         ps.setInt(1, foundId);
+         ps.setInt(2, userId);
+
+         return ps.executeUpdate() > 0;
+
+     } catch (SQLException e) {
+
+         e.printStackTrace();
+     }
+
+     return false;
+ }
     
 }

@@ -11,7 +11,7 @@ public class DBConnection {
             "root";
 
     private static final String PASSWORD =
-            "0000";
+            "Harshuanku@123";
     public static Connection getConnection() {
 
         Connection con = null;

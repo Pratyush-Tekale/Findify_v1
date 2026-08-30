@@ -251,8 +251,75 @@ public class LostItemDAO {
         return 0;
     }
     
-    
-    
-    
+ // =====================================================
+ // GET LOST ITEMS REPORTED BY A USER
+ // =====================================================
+ public List<LostItem> getLostItemsByUser(int userId) {
 
+     List<LostItem> lostItems = new ArrayList<>();
+
+     String sql =
+         "SELECT * FROM lost_items " +
+         "WHERE user_id = ? " +
+         "ORDER BY created_at DESC";
+
+     try (Connection con = DBConnection.getConnection();
+          PreparedStatement ps = con.prepareStatement(sql)) {
+
+         ps.setInt(1, userId);
+
+         try (ResultSet rs = ps.executeQuery()) {
+
+             while (rs.next()) {
+
+                 LostItem item = new LostItem();
+
+                 item.setLostId(rs.getInt("lost_id"));
+                 item.setUserId(rs.getInt("user_id"));
+                 item.setCategoryId(rs.getInt("category_id"));
+                 item.setItemName(rs.getString("item_name"));
+                 item.setDescription(rs.getString("description"));
+                 item.setLocationLost(rs.getString("location_lost"));
+                 item.setDateLost(rs.getDate("date_lost"));
+                 item.setImage(rs.getString("image"));
+                 item.setStatus(rs.getString("status"));
+
+                 lostItems.add(item);
+             }
+         }
+
+     } catch (SQLException e) {
+
+         e.printStackTrace();
+     }
+
+     return lostItems;
+ }
+
+
+ // =====================================================
+ // DELETE LOST ITEM - ONLY OWNER CAN DELETE
+ // =====================================================
+ public boolean deleteLostItem(int lostId, int userId) {
+
+     String sql =
+         "DELETE FROM lost_items " +
+         "WHERE lost_id = ? AND user_id = ?";
+
+     try (Connection con = DBConnection.getConnection();
+          PreparedStatement ps = con.prepareStatement(sql)) {
+
+         ps.setInt(1, lostId);
+         ps.setInt(2, userId);
+
+         return ps.executeUpdate() > 0;
+
+     } catch (SQLException e) {
+
+         e.printStackTrace();
+     }
+
+     return false;
+ }
+    
 }

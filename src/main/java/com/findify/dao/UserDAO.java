@@ -142,4 +142,115 @@ public class UserDAO {
 
         return false;
     }
-    }
+    
+ // ===============================
+ // UPDATE NAME
+ // ===============================
+ public boolean updateName(int userId, String fullName) {
+
+     try (Connection con = DBConnection.getConnection()) {
+
+         String sql = "UPDATE users SET full_name=? WHERE user_id=?";
+
+         PreparedStatement ps = con.prepareStatement(sql);
+
+         ps.setString(1, fullName);
+         ps.setInt(2, userId);
+
+         int rows = ps.executeUpdate();
+
+         return rows > 0;
+
+     } catch (SQLException e) {
+
+         e.printStackTrace();
+
+     }
+
+     return false;
+ }
+
+
+ // ===============================
+ // UPDATE PHONE
+ // ===============================
+ public boolean updatePhone(int userId, String phone) {
+
+     try (Connection con = DBConnection.getConnection()) {
+
+         String sql = "UPDATE users SET phone=? WHERE user_id=?";
+
+         PreparedStatement ps = con.prepareStatement(sql);
+
+         ps.setString(1, phone);
+         ps.setInt(2, userId);
+
+         int rows = ps.executeUpdate();
+
+         return rows > 0;
+
+     } catch (SQLException e) {
+
+         e.printStackTrace();
+
+     }
+
+     return false;
+ }
+
+
+ // ===============================
+ // UPDATE EMAIL
+ // ===============================
+ public boolean updateEmail(int userId, String email) {
+
+     try (Connection con = DBConnection.getConnection()) {
+
+         String sql = "UPDATE users SET email=? WHERE user_id=?";
+
+         PreparedStatement ps = con.prepareStatement(sql);
+
+         ps.setString(1, email);
+         ps.setInt(2, userId);
+
+         int rows = ps.executeUpdate();
+
+         return rows > 0;
+
+     } catch (SQLException e) {
+
+         e.printStackTrace();
+
+     }
+
+     return false;
+ }
+
+
+ // ===============================
+ // DELETE USER ACCOUNT
+ // ===============================
+ public boolean deleteUser(int userId) {
+
+     try (Connection con = DBConnection.getConnection()) {
+
+         String sql = "DELETE FROM users WHERE user_id=?";
+
+         PreparedStatement ps = con.prepareStatement(sql);
+
+         ps.setInt(1, userId);
+
+         int rows = ps.executeUpdate();
+
+         return rows > 0;
+
+     } catch (SQLException e) {
+
+         e.printStackTrace();
+
+     }
+
+     return false;
+ }
+ 
+}

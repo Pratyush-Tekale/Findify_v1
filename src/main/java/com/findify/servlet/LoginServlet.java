@@ -27,38 +27,38 @@ public class LoginServlet extends HttpServlet {
 
         // Get form data
         
-    	String email = request.getParameter("email");
-    	String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
 
-    	UserDAO dao = new UserDAO();
+        UserDAO dao = new UserDAO();
 
-    	User user = dao.login(email, password);
+        User user = dao.login(email, password);
 
-    	if(user != null){
+        if (user != null) {
 
-    	    HttpSession session = request.getSession();
+            HttpSession session = request.getSession();
 
-    	    session.setAttribute("loggedInUser", user);
+            session.setAttribute("loggedInUser", user);
 
-    	    if ("ADMIN".equals(user.getRole())) {
+            if ("ADMIN".equals(user.getRole())) {
 
-    	        response.sendRedirect("AdminDashboardServlet");
+                response.sendRedirect("AdminDashboardServlet");
 
-    	    } else {
+            } else {
 
-    	        response.sendRedirect("index.jsp");
+                response.sendRedirect("index.jsp");
 
-    	    }
+            }
 
-    	    }
+        } else {
 
-    	
-    	else{
+            request.setAttribute(
+                    "error",
+                    "Invalid Email or Password"
+            );
 
-    	    request.setAttribute("error","Invalid Email or Password");
-
-    	    request.getRequestDispatcher("login.jsp")
-    	           .forward(request,response);
-    	}
+            request.getRequestDispatcher("login.jsp")
+                   .forward(request, response);
+        }
     }
 }

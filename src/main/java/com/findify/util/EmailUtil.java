@@ -12,10 +12,10 @@ import jakarta.mail.internet.MimeMessage;
 
 public class EmailUtil {
 
-    public static void sendOTP(String recipientEmail, String otp) {
+    public static void sendOTP(String recipientEmail, String otp, String purpose) {
 
-        final String senderEmail = "harshbudhwani2006@gmail.com";
-        final String appPassword = "mlrgkmuxedpwgpps";
+    	final String senderEmail = "findifysmart@gmail.com";
+    	final String appPassword = "blmjreddzvytqyrl";
 
         Properties properties = new Properties();
 
@@ -24,7 +24,8 @@ public class EmailUtil {
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
 
-        Session session = Session.getInstance(properties,
+        Session session = Session.getInstance(
+                properties,
                 new Authenticator() {
 
                     @Override
@@ -48,27 +49,36 @@ public class EmailUtil {
                     InternetAddress.parse(recipientEmail)
             );
 
-            message.setSubject("Findify Password Reset OTP");
+            message.setSubject("Findify Email Verification OTP");
 
             message.setText(
                     "Hello,\n\n"
-                    + "Your Findify password reset OTP is:\n\n"
+                    + "Your Findify verification OTP is:\n\n"
                     + otp
                     + "\n\n"
                     + "This OTP is valid for 5 minutes.\n\n"
-                    + "If you did not request a password reset, please ignore this email.\n\n"
+                    + "Purpose: " + purpose
+                    + "\n\n"
+                    + "If you did not request this, please ignore this email.\n\n"
                     + "Regards,\n"
                     + "Findify Team"
             );
 
             Transport.send(message);
 
-            System.out.println("OTP sent successfully to " + recipientEmail);
+            System.out.println(
+                    "OTP SENT SUCCESSFULLY TO: " + recipientEmail
+            );
 
         } catch (Exception e) {
 
-            System.out.println("EMAIL ERROR:");
+            System.out.println("=================================");
+            System.out.println("       FINDIFY EMAIL ERROR");
+            System.out.println("=================================");
+
             e.printStackTrace();
+
+            System.out.println("=================================");
         }
     }
 }

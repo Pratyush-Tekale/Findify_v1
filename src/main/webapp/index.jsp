@@ -89,11 +89,19 @@
       </ul>
 <%
 if (loggedInUser != null) {
+
+    String dashboardLabel = "User";
+
+    if ("ADMIN".equalsIgnoreCase(loggedInUser.getRole())) {
+        dashboardLabel = "Admin";
+    }
 %>
 
 <div class="user-menu">
 
-    <button type="button" class="user-btn" onclick="toggleUserMenu()">
+    <button type="button"
+            class="user-btn"
+            onclick="toggleUserMenu()">
 
         <svg xmlns="http://www.w3.org/2000/svg"
              width="18"
@@ -106,11 +114,12 @@ if (loggedInUser != null) {
              stroke-linejoin="round">
 
             <path d="M20 21a8 8 0 0 0-16 0"></path>
+
             <circle cx="12" cy="7" r="4"></circle>
 
         </svg>
 
-        User
+        <%= dashboardLabel %>
 
     </button>
 
@@ -121,7 +130,7 @@ if (loggedInUser != null) {
             Your Profile
         </a>
 
-        <a href="UserDashboardServlet">
+        <a href="DashboardRedirectServlet">
             My Dashboard
         </a>
 

@@ -96,9 +96,9 @@
                     <p>Update your full name.</p>
                 </div>
 
-                <button type="button" onclick="showMessage('Change Name feature coming soon.')">
-                    Edit
-                </button>
+                <a href="changeName.jsp" class="setting-btn">
+    Edit
+</a>
 
             </div>
 
@@ -110,23 +110,9 @@
                     <p>Update your registered phone number.</p>
                 </div>
 
-                <button type="button" onclick="showMessage('Change Phone feature coming soon.')">
-                    Edit
-                </button>
-
-            </div>
-
-
-            <div class="setting-item">
-
-                <div>
-                    <h3>Change Email</h3>
-                    <p>Update your registered email address.</p>
-                </div>
-
-                <button type="button" onclick="showMessage('Change Email feature coming soon.')">
-                    Edit
-                </button>
+                <a href="changePhone.jsp" class="setting-btn">
+    Edit
+</a>
 
             </div>
 
@@ -148,102 +134,43 @@
                     <p>Update your account password.</p>
                 </div>
 
-                <button type="button" onclick="showMessage('Change Password feature coming soon.')">
-                    Change
-                </button>
+                <a href="changePassword.jsp" class="setting-btn">
+    Change
+</a>
 
             </div>
 
         </div>
-
-
-        <!-- NOTIFICATIONS -->
-
-        <div class="settings-group">
-
-            <div class="group-title">
-                NOTIFICATIONS
-            </div>
-
-            <div class="setting-item">
-
-                <div>
-                    <h3>Email Notifications</h3>
-                    <p>Receive important Findify updates by email.</p>
-                </div>
-
-                <label class="switch">
-
-                    <input type="checkbox" checked>
-
-                    <span class="slider"></span>
-
-                </label>
-
-            </div>
-
-
-            <div class="setting-item">
-
-                <div>
-                    <h3>Item Match Notifications</h3>
-                    <p>Get notified when a possible match is found.</p>
-                </div>
-
-                <label class="switch">
-
-                    <input type="checkbox" checked>
-
-                    <span class="slider"></span>
-
-                </label>
-
-            </div>
-
-
-            <div class="setting-item">
-
-                <div>
-                    <h3>Claim Updates</h3>
-                    <p>Receive updates about your requests and claims.</p>
-                </div>
-
-                <label class="switch">
-
-                    <input type="checkbox" checked>
-
-                    <span class="slider"></span>
-
-                </label>
-
-            </div>
-
-        </div>
-
 
         
         <!-- DANGER ZONE -->
 
-        <div class="danger-zone">
+       <div class="danger-zone">
 
-            <div>
+    <div>
 
-                <h3>Delete Account</h3>
+        <h3>Delete Account</h3>
 
-                <p>
-                    Permanently delete your Findify account.
-                </p>
+        <p>
+            Permanently delete your Findify account.
+        </p>
 
-            </div>
+    </div>
 
-            <button type="button" class="delete-btn"
-                    onclick="confirmDelete()">
+    <form action="DeleteAccountServlet"
+          method="post"
+          onsubmit="return confirmDelete();">
 
-                Delete Account
+        <button type="submit"
+                class="delete-btn">
 
-            </button>
+            Delete Account
 
-        </div>
+        </button>
+
+    </form>
+
+</div>
 
 
         <div class="bottom-buttons">
@@ -266,31 +193,62 @@
 <script>
 
 function showMessage(message) {
-
     alert(message);
-
 }
-
 
 function confirmDelete() {
 
-    const result = confirm(
-        "Are you sure you want to delete your account?"
+    return confirm(
+        "Are you sure you want to permanently delete your Findify account?\n\nThis action cannot be undone."
     );
+}
 
-    if (result) {
 
-        alert(
-            "Account deletion will be implemented next."
+// ===============================
+// SUCCESS MESSAGE
+// ===============================
+
+window.onload = function () {
+
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.get("success") === "name") {
+
+        alert("Name changed successfully!");
+
+        window.history.replaceState(
+            {},
+            document.title,
+            "settings.jsp"
         );
+    }
+    
+    if (params.get("success") === "password") {
 
+        alert("Password changed successfully!");
+
+        window.history.replaceState(
+            {},
+            document.title,
+            "settings.jsp"
+        );
     }
 
-}
+
+    if (params.get("success") === "phone") {
+
+        alert("Phone number changed successfully!");
+
+        window.history.replaceState(
+            {},
+            document.title,
+            "settings.jsp"
+        );
+    }
+};
 
 </script>
 
 </body>
 
 </html>
-```
