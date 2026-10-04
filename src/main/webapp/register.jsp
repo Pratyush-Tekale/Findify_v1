@@ -1,0 +1,225 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Findify | Create Account</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="css/register.css">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="logo">
+        FINDIFY
+    </div>
+
+    <a href="html/index.jsp" class="back-btn">
+        ← Back to Home
+    </a>
+
+</header>
+
+
+<section class="register-section">
+
+    <div class="register-card">
+
+        <div class="paper-tape"></div>
+
+
+        <h4>CREATE ACCOUNT</h4>
+
+        <h1>Join Findify</h1>
+
+        <p>
+            Create your account to report lost items and claim found items.
+        </p>
+
+
+        <%
+    Object regError = request.getAttribute("error");
+    if (regError != null) {
+%>
+<p style="color:#c0392b;font-weight:600;margin-bottom:12px;">
+    <%= regError.toString()
+            .replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;") %>
+</p>
+<%
+    }
+%>
+
+<form action="RegisterServlet" method="POST">
+
+
+            <!-- Full Name -->
+
+            <div class="input-group">
+
+                <label>
+                    Full Name
+                    <span style="color:#c0392b;">*</span>
+                </label>
+
+                <input
+                    type="text"
+                    id="fullname"
+                    name="fullName"
+                    placeholder="Enter your full name"
+                    autocomplete="name"
+                    required>
+
+            </div>
+
+
+            <!-- Email -->
+
+            <div class="input-group">
+
+                <label>
+                    Email Address
+                    <span style="color:#c0392b;">*</span>
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required>
+
+            </div>
+
+
+            <!-- Phone -->
+
+            <div class="input-group">
+
+                <label>
+                    Phone Number
+                    <span style="color:#c0392b;">*</span>
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Enter your phone number"
+                    inputmode="numeric"
+                    maxlength="10"
+                    autocomplete="tel"
+                    required>
+
+            </div>
+
+
+            <!-- Password -->
+
+            <div class="input-group">
+
+                <label>
+                    Password
+                    <span style="color:#c0392b;">*</span>
+                </label>
+
+                <div class="password-box">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create password"
+                        autocomplete="new-password"
+                        required>
+
+                    <span
+                        class="toggle-password"
+                        id="togglePassword">👁</span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Confirm Password -->
+
+            <div class="input-group">
+
+                <label>
+                    Confirm Password
+                    <span style="color:#c0392b;">*</span>
+                </label>
+
+                <div class="password-box">
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Confirm password"
+                        autocomplete="new-password"
+                        required>
+
+                    <span
+                        class="toggle-password"
+                        id="toggleConfirmPassword">👁</span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Submit -->
+
+            <button
+                type="submit"
+                class="register-btn">
+
+                Create Account
+
+            </button>
+
+        </form>
+
+
+        <div class="login-link">
+
+            Already have an account?
+
+            <a href="login.jsp">
+                Login
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<script src="js/register.js"></script>
+
+</body>
+
+</html>

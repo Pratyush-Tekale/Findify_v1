@@ -1,0 +1,235 @@
+/* ===========================
+        GLOBAL
+=========================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    background:#BC9468;
+
+    font-family:'Inter',sans-serif;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    min-height:100vh;
+
+    color:#221E1A;
+
+}
+
+/* ===========================
+      SUCCESS CARD
+=========================== */
+
+.success-container{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:30px;
+
+}
+
+.success-card{
+
+    width:100%;
+
+    max-width:650px;
+
+    background:#fffdf8;
+
+    border:2px solid #222;
+
+    border-radius:12px;
+
+    padding:50px 40px;
+
+    text-align:center;
+
+    box-shadow:10px 10px 0px #d2c9b8;
+
+    animation:fadeUp .7s ease;
+
+}
+
+/* ===========================
+        SUCCESS ICON
+=========================== */
+
+.success-icon{
+
+    width:100px;
+
+    height:100px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    background:#eaf8ec;
+
+    border:3px solid #27ae60;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:55px;
+
+    margin-bottom:25px;
+
+}
+
+/* ===========================
+          HEADING
+=========================== */
+
+.success-card h1{
+
+    font-family:'Special Elite',cursive;
+
+    font-size:42px;
+
+    color:#1d2c3b;
+
+    margin-bottom:25px;
+
+    line-height:1.3;
+
+}
+
+/* ===========================
+          PARAGRAPH
+=========================== */
+
+.success-card p{
+
+    font-size:18px;
+
+    color:#555;
+
+    line-height:1.8;
+
+    margin-bottom:12px;
+
+}
+
+/* ===========================
+         BUTTON
+=========================== */
+
+.ok-btn{
+
+    display:inline-block;
+
+    margin-top:35px;
+
+    background:#1d2c3b;
+
+    color:white;
+
+    padding:15px 60px;
+
+    border-radius:8px;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    text-decoration:none;
+
+    transition:.3s;
+
+}
+
+.ok-btn:hover{
+
+    background:#101820;
+
+    transform:translateY(-3px);
+
+}
+
+/* ===========================
+        ANIMATION
+=========================== */
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(35px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ===========================
+       RESPONSIVE
+=========================== */
+
+@media(max-width:768px){
+
+.success-card{
+
+    padding:35px 25px;
+
+}
+
+.success-card h1{
+
+    font-size:30px;
+
+}
+
+.success-card p{
+
+    font-size:16px;
+
+}
+
+.success-icon{
+
+    width:80px;
+
+    height:80px;
+
+    font-size:42px;
+
+}
+
+.ok-btn{
+
+    width:100%;
+
+    padding:14px;
+
+}
+
+}

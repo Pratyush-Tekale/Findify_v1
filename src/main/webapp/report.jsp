@@ -1,0 +1,188 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Findify | Report Lost Item</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/report.css">
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+FINDIFY
+</div>
+
+<nav>
+
+<a href="index.jsp">Home</a>
+
+<a href="contact.html">
+	Contact Us
+	</a>
+
+</nav>
+
+</header>
+
+<section class="report-section">
+
+<div class="report-card">
+
+<div class="paper-tape"></div>
+
+<h4>REPORT LOST ITEM</h4>
+
+<h1>Lost Something?</h1>
+
+<p>
+Fill in the details below. If someone reports your item as found, we'll help you reconnect with it.
+</p>
+
+<%
+    if ("true".equals(request.getParameter("error"))) {
+%>
+<p style="color:#c0392b;font-weight:600;margin-bottom:12px;">
+    Your lost item report could not be saved. Please check the fields and try again.
+</p>
+<%
+    } else if ("upload".equals(request.getParameter("error"))) {
+%>
+<p style="color:#c0392b;font-weight:600;margin-bottom:12px;">
+    Only JPG, PNG, GIF or WEBP images up to 5 MB can be uploaded.
+</p>
+<%
+    }
+%>
+
+<form action="ReportServlet" method="post" enctype="multipart/form-data">
+
+<div class="row">
+
+<div class="input-group">
+
+<label>Item Name<span style="color:#c0392b;">*</span></label>
+
+<input type="text" id="itemName" name="itemName" placeholder="Example: Black Wallet" required>
+
+</div>
+
+<div class="input-group">
+
+<label>Category<span style="color:#c0392b;">*</span></label>
+
+<select id="category" name="category" required>
+
+<option value="">Select Category</option>
+
+<option>Electronics</option>
+<option>Books</option>
+<option>Wallet</option>
+<option>ID Card</option>
+<option>Keys</option>
+<option>Bag</option>
+<option>Clothing</option>
+<option>Mobile</option>
+<option>Jewellery</option>
+<option>Accessories</option>
+<option>Others</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="input-group">
+
+<label>Date Lost<span style="color:#c0392b;">*</span></label>
+
+<input type="date" id="dateLost" name="dateLost" required>
+
+</div>
+
+<div class="input-group">
+
+<label>Lost Location<span style="color:#c0392b;">*</span></label>
+
+<input type="text" id="location" name="location" placeholder="Example: Library" required>
+
+</div>
+
+</div>
+
+<div class="input-group">
+
+<label>Description<span style="color:#c0392b;">*</span></label>
+
+<textarea id="description"
+          name="description"
+          rows="5"
+          placeholder="Describe your item..."
+          required></textarea>
+
+</div>
+
+<div class="row">
+
+<div class="input-group">
+
+<label>Contact Number<span style="color:#c0392b;">*</span></label>
+
+<input type="tel" id="contact" name="contact" placeholder="9876543210" required>
+
+</div>
+
+<div class="input-group">
+
+<label>Email Address<span style="color:#c0392b;">*</span></label>
+
+<input type="email" id="email" name="email" placeholder="example@gmail.com" required>
+
+</div>
+
+</div>
+
+<div class="input-group">
+
+<label>Upload Image (Optional)</label>
+
+<input type="file" id="image" name="image">
+
+</div>
+
+<button type="submit" class="submit-btn">
+
+Submit Report
+
+</button>
+
+</form>
+
+<div class="back-link">
+
+<a href="index.jsp">
+
+← Back to Home
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+<script src="js/report.js"></script>
+</body>
+</html>

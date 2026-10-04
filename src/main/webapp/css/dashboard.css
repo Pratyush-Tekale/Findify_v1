@@ -1,0 +1,14 @@
+/* Dashboard page — page-specific tweaks */
+.dash-welcome{
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;
+  margin-bottom:36px;
+}
+.dash-welcome .avatar-chip{
+  display:flex; align-items:center; gap:10px; background:var(--card);
+  border:2px solid var(--ink); border-radius:30px; padding:8px 16px 8px 8px;
+}
+.dash-welcome .avatar-chip .av{
+  width:34px; height:34px; border-radius:50%; background:var(--amber);
+  display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--ink);
+  font-family:'Special Elite', monospace;
+}

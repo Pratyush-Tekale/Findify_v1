@@ -1,0 +1,338 @@
+:root{
+    --board:#BC9468;
+    --board-dark:#a67e54;
+    --ink:#221E1A;
+    --navy:#22303F;
+    --red:#B33A2D;
+    --card:#FBF7EE;
+    --card-line:#d8cdb4;
+    --muted:#6b6255;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+
+    background:
+    radial-gradient(circle at 20% 20%, rgba(0,0,0,.04) 0, transparent 3%),
+    radial-gradient(circle at 70% 50%, rgba(0,0,0,.04) 0, transparent 3%),
+    linear-gradient(180deg,var(--board),var(--board-dark));
+
+    min-height:100vh;
+}
+
+
+/* HEADER */
+
+header{
+    background:rgba(243,238,225,.95);
+
+    border-bottom:2px dashed var(--card-line);
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:18px 60px;
+}
+
+.logo{
+    font-family:'Special Elite',cursive;
+
+    font-size:30px;
+
+    color:var(--ink);
+
+    letter-spacing:2px;
+}
+
+.back-btn{
+    text-decoration:none;
+
+    color:white;
+
+    background:var(--navy);
+
+    padding:10px 20px;
+
+    border-radius:4px;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.back-btn:hover{
+    background:var(--red);
+}
+
+
+/* PROFILE SECTION */
+
+.profile-section{
+
+    min-height:calc(100vh - 80px);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:60px 20px;
+}
+
+
+/* PROFILE CARD */
+
+.profile-card{
+
+    width:520px;
+
+    background:var(--card);
+
+    border:2px solid var(--ink);
+
+    border-radius:8px;
+
+    position:relative;
+
+    padding:40px;
+
+    box-shadow:8px 10px 0 rgba(0,0,0,.25);
+}
+
+
+/* TAPE */
+
+.paper-tape{
+
+    width:120px;
+
+    height:18px;
+
+    background:rgba(227,163,67,.55);
+
+    position:absolute;
+
+    top:-10px;
+
+    left:50%;
+
+    transform:translateX(-50%) rotate(-4deg);
+
+    border:1px solid rgba(0,0,0,.15);
+}
+
+
+/* PROFILE ICON */
+
+.profile-icon{
+
+    width:75px;
+
+    height:75px;
+
+    margin:0 auto 15px;
+
+    border-radius:50%;
+
+    background:var(--navy);
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+}
+
+
+/* HEADINGS */
+
+.profile-card h4{
+
+    text-align:center;
+
+    font-family:'JetBrains Mono',monospace;
+
+    color:var(--red);
+
+    letter-spacing:2px;
+
+    margin-bottom:8px;
+}
+
+.profile-card h1{
+
+    text-align:center;
+
+    font-family:'Special Elite',cursive;
+
+    font-size:32px;
+
+    color:var(--ink);
+
+    margin-bottom:8px;
+}
+
+.profile-subtitle{
+
+    text-align:center;
+
+    color:var(--muted);
+
+    margin-bottom:30px;
+}
+
+
+/* INFORMATION */
+
+.profile-info{
+
+    border:2px solid var(--card-line);
+
+    border-radius:5px;
+
+    overflow:hidden;
+
+    background:white;
+}
+
+.info-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    padding:16px;
+
+    border-bottom:1px solid var(--card-line);
+}
+
+.info-row:last-child{
+
+    border-bottom:none;
+}
+
+.info-label{
+
+    font-weight:600;
+
+    color:var(--muted);
+}
+
+.info-value{
+
+    color:var(--ink);
+
+    text-align:right;
+
+    font-weight:500;
+
+    word-break:break-word;
+}
+
+
+/* BUTTONS */
+
+.profile-actions{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-top:30px;
+}
+
+.home-btn,
+.logout-btn{
+
+    flex:1;
+
+    text-align:center;
+
+    padding:13px;
+
+    border-radius:4px;
+
+    text-decoration:none;
+
+    font-weight:600;
+}
+
+.home-btn{
+
+    background:var(--navy);
+
+    color:white;
+}
+
+.home-btn:hover{
+
+    background:var(--red);
+}
+
+.logout-btn{
+
+    background:white;
+
+    color:var(--red);
+
+    border:2px solid var(--red);
+}
+
+.logout-btn:hover{
+
+    background:var(--red);
+
+    color:white;
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:600px){
+
+    header{
+
+        padding:18px 20px;
+    }
+
+    .logo{
+
+        font-size:22px;
+    }
+
+    .profile-card{
+
+        width:100%;
+
+        padding:30px 20px;
+    }
+
+    .info-row{
+
+        flex-direction:column;
+
+        gap:5px;
+    }
+
+    .info-value{
+
+        text-align:left;
+    }
+
+    .profile-actions{
+
+        flex-direction:column;
+    }
+}
